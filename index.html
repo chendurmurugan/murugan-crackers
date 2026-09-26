@@ -687,7 +687,7 @@ function renderCatalog(){
             const id = ci + '-' + ii;
             const fr = finalRate(it.rate, it.discount);
             const available = String(it.status || 'AVAILABLE').toUpperCase() !== 'SOLD OUT';
-            return \`<tr class="${available ? '' : 'sold-out-row'}">
+            return `<tr class="${available ? '' : 'sold-out-row'}">
               <td class="pname">${escapeHtml(it.name)}<span class="pcontent">${escapeHtml(it.content)}</span>${available ? '' : '<span class="sold-badge">SOLD OUT</span>'}</td>
               <td class="num"><span class="rate-old">${fmt(it.rate)}</span></td>
               <td class="num rate-final">${fmt(fr)}</td>
@@ -699,7 +699,7 @@ function renderCatalog(){
                 </div>
               </td>
               <td class="num"><span class="amount" data-amt="${id}">₹0</span></td>
-            </tr>\`;
+            </tr>`; 
           }).join('')}
         </tbody>
       </table>
