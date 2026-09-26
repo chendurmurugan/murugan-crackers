@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Murugan Crackers — Order Online</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --maroon:#6B1420;
+    --maroon-deep:#4A0E17;
+    --gold:#C89B3C;
+    --gold-soft:#E4C877;
+    --cream:#FBF3E4;
+    --ink:#241C15;
+    --green:#33463B;
+    --line: rgba(36,28,20,0.18);
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-padding-top:env(safe-area-inset-top,0px);}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'IBM Plex Sans',system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{font-family:'Fraunces',Georgia,serif;}
+
+  /* ---- Hero / ledger cover ---- */
+  .cover{
+    background:
+      radial-gradient(circle at 18% 20%, rgba(200,155,60,0.18), transparent 45%),
+      linear-gradient(180deg,var(--maroon) 0%, var(--maroon-deep) 100%);
+    color:var(--cream);
+    padding:56px 20px 40px;
+    position:relative;
+  }
+  .cover-inner{max-width:780px;margin:0 auto;}
+  .stamp{
+    display:inline-flex;align-items:center;gap:8px;
+    border:1.5px solid var(--gold-soft);
+    color:var(--gold-soft);
+    padding:5px 14px;
+    border-radius:999px;
+    font-size:0.78rem;
+    letter-spacing:0.02em;
+    margin-bottom:22px;
+  }
+  .cover h1{
+    font-size:clamp(2.4rem,7vw,3.6rem);
+    font-weight:700;
+    margin:0 0 6px;
+    line-height:1.02;
+  }
+  .cover p.tagline{
+    margin:0 0 26px;
+    font-size:1.05rem;
+    color:var(--gold-soft);
+    max-width:38ch;
+  }
+  .cover-meta{
+    display:flex;flex-wrap:wrap;gap:22px;
+    border-top:1px solid rgba(228,200,119,0.3);
+    padding-top:18px;
+    font-size:0.86rem;
+    color:rgba(251,243,228,0.75);
+  }
+  .cover-meta b{color:var(--gold-soft);display:block;font-size:1.15rem;font-family:'Fraunces',serif;font-weight:600;}
+
+
+  .shop-contact{
+    display:flex;flex-wrap:wrap;gap:10px 18px;
+    margin-top:14px;font-size:.9rem;color:rgba(251,243,228,.86);
+  }
+  .shop-contact a{color:var(--gold-soft);text-decoration:none;font-weight:600}
+  .category-nav{
+    max-width:780px;margin:0 auto;padding:14px 20px 0;
+    display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;
+    position:sticky;top:0;z-index:10;background:var(--cream);
+  }
+  .category-nav::-webkit-scrollbar{display:none}
+  .category-nav button{
+    flex:0 0 auto;border:1px solid var(--line);background:transparent;
+    color:var(--ink);padding:7px 11px;border-radius:999px;cursor:pointer;
+    font:500 .78rem 'IBM Plex Sans',sans-serif;
+  }
+  .category-nav button:hover{border-color:var(--gold);background:rgba(200,155,60,.12)}
+
+
+  /* ---- Clear product names + customer confirmation modal ---- */
+  .pname{font-weight:600;white-space:normal;word-break:normal;line-height:1.25;min-width:240px;}
+  .pcontent{font-size:.78rem;opacity:.62;margin-top:3px;}
+  table{table-layout:auto;}
+  .cat table th:first-child,.cat table td:first-child{width:42%;}
+  .orderbar button.cta{background:#25D366;color:#07351f;}
+  .modal-backdrop{
+    position:fixed;inset:0;background:rgba(20,12,8,.68);z-index:100;
+    display:none;align-items:center;justify-content:center;padding:18px;
+  }
+  .modal-backdrop.open{display:flex;}
+  .order-modal{
+    width:min(720px,100%);max-height:90vh;overflow:auto;background:var(--cream);
+    color:var(--ink);border-radius:14px;box-shadow:0 20px 70px rgba(0,0,0,.35);
+    padding:22px;
+  }
+  .modal-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;
+    border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:16px;}
+  .modal-head h2{margin:0;font-size:1.55rem;}
+  .modal-close{border:1px solid var(--line);background:transparent;border-radius:8px;
+    width:36px;height:36px;cursor:pointer;font-size:1.25rem;color:var(--ink);}
+  .customer-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0;}
+  .field{display:flex;flex-direction:column;gap:5px;}
+  .field.full{grid-column:1/-1;}
+  .field label{font-size:.78rem;font-weight:600;opacity:.72;}
+  .field input,.field textarea{
+    width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:8px;
+    background:rgba(255,255,255,.55);color:var(--ink);font:inherit;
+  }
+  .field textarea{min-height:78px;resize:vertical;}
+  .selected-title{font-weight:600;margin:10px 0 8px;}
+  .selected-list{border:1px solid var(--line);border-radius:9px;overflow:hidden;}
+  .selected-row{display:grid;grid-template-columns:1fr auto auto;gap:10px;padding:10px 12px;
+    border-bottom:1px dashed var(--line);align-items:start;}
+  .selected-row:last-child{border-bottom:0;}
+  .selected-name{font-weight:600;line-height:1.25;}
+  .selected-meta{font-size:.75rem;opacity:.62;margin-top:3px;}
+  .selected-amount{font-weight:700;white-space:nowrap;}
+  .confirm-total{display:flex;justify-content:space-between;align-items:center;
+    margin-top:14px;padding:13px 0;border-top:2px solid var(--ink);}
+  .confirm-total b{font-family:'Fraunces',serif;font-size:1.35rem;color:var(--maroon);}
+
+  .pdf-actions{margin-top:16px;padding:14px;border:1px solid var(--line);border-radius:10px;background:rgba(200,155,60,.08)}
+  .pdf-success{font-weight:600;color:var(--green);margin-bottom:10px}
+  .pdf-action-row{display:flex;gap:10px;flex-wrap:wrap}
+  .btn-pdf,.pdf-action-row .btn-whatsapp{border:none;border-radius:8px;padding:11px 15px;font-weight:600;cursor:pointer}
+  .btn-pdf{background:var(--maroon);color:var(--cream)}
+  .pdf-help{font-size:.78rem;opacity:.65;margin-top:10px;line-height:1.45}
+
+  .confirm-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:14px;}
+  .confirm-actions button{border:0;border-radius:8px;padding:12px 18px;font:600 .92rem 'IBM Plex Sans',sans-serif;cursor:pointer;}
+  .btn-cancel{background:transparent;border:1px solid var(--line)!important;color:var(--ink);}
+  .btn-whatsapp{background:#25D366;color:#07351f;}
+  .help-note{font-size:.75rem;opacity:.62;margin-top:8px;}
+  .pdf-preview{margin-top:14px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff;}
+  .pdf-preview-head{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:rgba(200,155,60,.10);font-size:.82rem;font-weight:600;}
+  .pdf-preview iframe{display:block;width:100%;height:430px;border:0;background:#fff;}
+  .open-pdf{background:transparent;color:var(--maroon);border:1px solid var(--maroon)!important;border-radius:8px;padding:7px 10px;font:600 .78rem 'IBM Plex Sans',sans-serif;cursor:pointer;}
+  @media(max-width:560px){
+    .customer-grid{grid-template-columns:1fr;}
+    .field.full{grid-column:auto;}
+    .selected-row{grid-template-columns:1fr auto;}
+    .selected-amount{grid-column:2;grid-row:1/3;}
+    .pname{min-width:170px;}
+    .cat table th:first-child,.cat table td:first-child{width:auto;}
+    .order-modal{padding:16px;}
+  }
+
+  /* ---- Catalog ---- */
+  main{max-width:780px;margin:0 auto;padding:8px 20px 140px;}
+  .cat{margin-top:44px;}
+  .cat-head{
+    display:flex;align-items:baseline;justify-content:space-between;
+    border-bottom:2px solid var(--ink);
+    padding-bottom:8px;margin-bottom:2px;
+  }
+  .cat-head h2{font-size:1.4rem;margin:0;font-weight:600;}
+  .cat-head span{font-size:0.82rem;color:var(--maroon);font-weight:600;}
+
+  table{width:100%;border-collapse:collapse;font-size:0.93rem;}
+  thead th{
+    text-align:left;font-weight:500;color:var(--ink);opacity:0.55;
+    font-size:0.75rem;padding:10px 6px 6px;border-bottom:1px solid var(--line);
+  }
+  thead th.num, td.num{text-align:right;}
+  tbody td{padding:12px 6px;border-bottom:1px dashed var(--line);vertical-align:middle;}
+  tbody tr:last-child td{border-bottom:1px solid var(--line);}
+  .pname{font-weight:500;}
+  .pcontent{display:block;font-size:0.78rem;opacity:0.6;margin-top:2px;}
+  .rate-old{opacity:0.5;text-decoration:line-through;font-size:0.85rem;}
+  .rate-final{color:var(--maroon);font-weight:600;}
+
+  .qty{
+    display:flex;align-items:center;gap:6px;justify-content:flex-end;
+  }
+  .qty button{
+    width:26px;height:26px;border-radius:6px;border:1px solid var(--line);
+    background:#fff;color:var(--ink);font-size:1rem;line-height:1;cursor:pointer;
+  }
+  .qty button:active{background:var(--gold-soft);}
+  .qty input{
+    width:34px;text-align:center;border:none;background:transparent;
+    font:inherit;font-weight:600;color:var(--ink);
+  }
+  .qty input:focus{outline:2px solid var(--gold);border-radius:4px;}
+  .amount{font-weight:600;min-width:60px;display:inline-block;}
+
+  footer{
+    max-width:780px;margin:0 auto;padding:0 20px 60px;
+    font-size:0.8rem;opacity:0.55;
+  }
+
+  /* ---- Sticky order bar ---- */
+  .orderbar{
+    position:fixed;left:0;right:0;bottom:0;
+    background:var(--ink);color:var(--cream);
+    padding:14px 20px calc(14px + env(safe-area-inset-bottom,0px));
+    display:flex;align-items:center;justify-content:center;
+    z-index:20;
+  }
+  .orderbar-inner{
+    width:100%;max-width:780px;
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+  }
+  .orderbar .totals{font-size:0.9rem;}
+  .orderbar .totals b{font-family:'Fraunces',serif;font-size:1.3rem;color:var(--gold-soft);display:block;}
+  .orderbar button.cta{
+    background:#25D366;color:#0b3320;border:none;
+    font-weight:600;font-size:0.95rem;
+    padding:12px 20px;border-radius:8px;cursor:pointer;
+    white-space:nowrap;
+  }
+  .orderbar button.cta:disabled{opacity:0.4;cursor:default;}
+  .orderbar button.cta:not(:disabled):active{transform:scale(0.98);}
+
+  @media (max-width:480px){
+    .orderbar .totals b{font-size:1.1rem;}
+    .orderbar button.cta{padding:11px 16px;font-size:0.88rem;}
+    thead th:nth-child(2), td:nth-child(2){display:none;}
+    .pname{min-width:0;}
+  }
+
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --cream:#1B1712;
+      --ink:#F1E9DA;
+      --line: rgba(241,233,218,0.18);
+    }
+    body{background:var(--cream);}
+    tbody td{border-color:var(--line);}
+    .qty input{color:var(--ink);}
+    .qty button{background:#2A251E;border-color:var(--line);color:var(--ink);}
+  }
+
+
+  .sold-out-row{opacity:.62;background:rgba(107,20,32,.045);}
+  .sold-badge{display:inline-block;margin-left:8px;padding:2px 7px;border-radius:999px;background:#8b1e2d;color:#fff;font-size:.68rem;font-weight:700;letter-spacing:.04em;vertical-align:middle;}
+  .qty button:disabled,.qty input:disabled{opacity:.35;cursor:not-allowed;}
+  .owner-tools{text-align:center;margin:24px auto 100px;font-size:.8rem;}
+  .owner-tools a{color:var(--maroon);font-weight:700;text-decoration:none;border-bottom:1px dashed var(--maroon);}
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="cover-inner">
+    <span class="stamp">✦ Diwali Price List — Season Discount</span>
+    <h1>Murugan Crackers</h1>
+    <p class="tagline">Direct from Sivakasi. Sound crackers, sparklers, aerial fancy &amp; gift boxes at wholesale rates.</p>
+    <div class="shop-contact">
+      <span>📍 Ramakrishnapuram, Sivakasi</span>
+      <a href="https://wa.me/918838203303" target="_blank" rel="noopener">WhatsApp: 8838203303</a>
+    </div>
+    <div class="cover-meta">
+      <div><b id="item-count">0 items</b>selected</div>
+      <div><b id="grand-total">₹0</b>estimated total</div>
+    </div>
+  </div>
+</div>
+
+<div class="category-nav" id="category-nav" aria-label="Product categories"></div>
+<main id="catalog"></main>
+
+<footer>Prices and product names are taken from the supplied Murugan Crackers price list. Stock and final delivery details will be confirmed by WhatsApp. Sale of fireworks is subject to local regulations — please sell only permitted varieties within licensed timings.</footer><div class="owner-tools"><a href="https://github.com/ponmanaraj-blip/murugan-crackers/edit/main/products.csv" target="_blank" rel="noopener">OWNER: UPDATE PRICE / STOCK</a></div>
+
+<div class="orderbar">
+  <div class="orderbar-inner">
+    <div class="totals"><b id="bar-total">₹0</b><span id="bar-count">0 items in cart</span></div>
+    <button class="cta" id="order-btn" disabled>Send Order on WhatsApp</button>
+  </div>
+</div>
+
+
+<div class="modal-backdrop" id="order-modal" role="dialog" aria-modal="true" aria-labelledby="order-title">
+  <div class="order-modal">
+    <div class="modal-head">
+      <div>
+        <h2 id="order-title">Confirm Your Order</h2>
+        <div class="help-note">Please enter your details so we can identify and confirm your order.</div>
+      </div>
+      <button class="modal-close" id="modal-close" type="button" aria-label="Close">×</button>
+    </div>
+
+    <div class="selected-title">Selected Items</div>
+    <div class="selected-list" id="selected-list"></div>
+
+    <div class="customer-grid">
+      <div class="field">
+        <label for="customer-name">Customer Name *</label>
+        <input id="customer-name" type="text" placeholder="Enter your name" autocomplete="name">
+      </div>
+      <div class="field">
+        <label for="customer-phone">Phone Number *</label>
+        <input id="customer-phone" type="tel" placeholder="10-digit mobile number" inputmode="tel" autocomplete="tel">
+      </div>
+      <div class="field full">
+        <label for="customer-address">Delivery / Contact Address *</label>
+        <textarea id="customer-address" placeholder="Enter your complete address" autocomplete="street-address"></textarea>
+      </div>
+      <div class="field full">
+        <label for="customer-note">Additional Note (optional)</label>
+        <input id="customer-note" type="text" placeholder="Delivery preference, landmark, etc.">
+      </div>
+    </div>
+
+    <div class="confirm-total">
+      <span>Order Total</span>
+      <b id="confirm-total">₹0</b>
+    </div>
+
+    <div class="confirm-actions">
+      <button class="btn-cancel" id="modal-cancel" type="button">Back to Products</button>
+      <button class="btn-whatsapp" id="confirm-order" type="button">✓ Confirm Order &amp; Send on WhatsApp</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ---- Replace with the shop's real WhatsApp number (country code + number, no + or spaces) ----
+const WHATSAPP_NUMBER = "918838203303";
+
+const CATALOG = [
+  {
+    category: "One Sound Crackers",
+    note: "80% OFF",
+    items: [
+      { name: "2.75\" Bird Cracskers (10 pkt)", content: "1pkt", rate: 300, discount: 80 },
+      { name: "3.5\" Lakshmi Crackers/Lady", content: "1pkt", rate: 60, discount: 80 },
+      { name: "4 Lakshmi/lady", content: "1pkt", rate: 85, discount: 80 },
+      { name: "4 Deluxe Lakshmi", content: "1pkt", rate: 110, discount: 80 },
+      { name: "5\" Jallikattu", content: "1pkt", rate: 220, discount: 80 },
+      { name: "6 kumki", content: "1pkt", rate: 230, discount: 80 },
+      { name: "Bagubali 4.5\"", content: "1pkt", rate: 175, discount: 80 },
+      { name: "4\" Gold lakshmi", content: "1pkt", rate: 120, discount: 80 },
+      { name: "King rider/terror bomb", content: "1pkt", rate: 450, discount: 80 },
+      { name: "Kidari (10pcs)", content: "1 box", rate: 1750, discount: 80 },
+      { name: "Hulk/Joker", content: "1pkt", rate: 140, discount: 80 },
+      { name: "Old is gold", content: "1Box(25pcs)", rate: 800, discount: 80 },
+      { name: "2 sound crackers", content: "1pkt", rate: 175, discount: 80 },
+    ]
+  },
+  {
+    category: "Ground Crackers",
+    note: "80% OFF",
+    items: [
+      { name: "Ground Chakkar Big (10pcs)", content: "1Box", rate: 175, discount: 80 },
+      { name: "Ground Chakkar Big (25 pcs)", content: "1Box", rate: 500, discount: 80 },
+      { name: "Ground Chakkar Special", content: "1Box", rate: 300, discount: 80 },
+      { name: "Ground Chakkar Deluxe", content: "1Box", rate: 500, discount: 80 },
+      { name: "Disco Wheel (10 Pcs)", content: "1Box", rate: 400, discount: 80 },
+      { name: "Panch Wheel", content: "1Box", rate: 650, discount: 80 },
+      { name: "Wire chakkar", content: "1Box", rate: 950, discount: 80 },
+      { name: "Whizling wheel(5pcs)", content: "1 Box", rate: 750, discount: 80 },
+    ]
+  },
+  {
+    category: "Flower Pots",
+    note: "80% OFF",
+    items: [
+      { name: "Flower Pots Big", content: "1Box", rate: 250, discount: 80 },
+      { name: "Flower Pots Special", content: "1Box", rate: 350, discount: 80 },
+      { name: "Flower Pots Ashoka", content: "1Box", rate: 450, discount: 80 },
+      { name: "Flower Pots jumbo pots", content: "1Box", rate: 2000, discount: 80 },
+      { name: "Flower Pots Deluxe (5pcs)", content: "1Box", rate: 700, discount: 80 },
+      { name: "Colour Koti", content: "1Box", rate: 800, discount: 80 },
+      { name: "Colour Koti Deluxe/ Colour pinjore", content: "1Box", rate: 1350, discount: 80 },
+      { name: "tri colour founden", content: "1Box", rate: 1050, discount: 80 },
+    ]
+  },
+  {
+    category: "Twinkling Star",
+    note: "80% OFF",
+    items: [
+      { name: "1.5\"twinkling Star", content: "1Box", rate: 100, discount: 80 },
+      { name: "4 Feet Deluxe Twinkling Star", content: "1Box", rate: 250, discount: 80 },
+    ]
+  },
+  {
+    category: "Pencils",
+    note: "80% OFF",
+    items: [
+      { name: "Minions Pencils", content: "1Box", rate: 750, discount: 80 },
+      { name: "LA-LA Pencils", content: "1Box", rate: 650, discount: 80 },
+      { name: "Hi-Tech pencil", content: "1Box", rate: 700, discount: 80 },
+      { name: "Sivakasi Pencil", content: "1Box", rate: 750, discount: 80 },
+      { name: "Selfie Stick", content: "1Box", rate: 400, discount: 80 },
+      { name: "Trix Pencils", content: "3 pcs", rate: 650, discount: 80 },
+      { name: "GOODLY Pencils", content: "3PCS", rate: 750, discount: 80 },
+      { name: "LAMBA LAMBA", content: "2Pcs", rate: 1560, discount: 80 },
+      { name: "3 Colour pencil (green,white,red)", content: "1 box", rate: 600, discount: 80 },
+    ]
+  },
+  {
+    category: "Rocket",
+    note: "80% OFF",
+    items: [
+      { name: "whisling Rockets", content: "1Box", rate: 700, discount: 80 },
+      { name: "Rocket Bomb", content: "1Box", rate: 300, discount: 80 },
+      { name: "Lunik Rocket", content: "1Box", rate: 350, discount: 80 },
+      { name: "2\" Sound Rocket", content: "1Box", rate: 400, discount: 80 },
+    ]
+  },
+  {
+    category: "Auto Bombs",
+    note: "80% OFF",
+    items: [
+      { name: "Hydro Bomb", content: "1Box", rate: 300, discount: 80 },
+      { name: "Bullet Bomb", content: "1Box", rate: 100, discount: 80 },
+      { name: "Classic Bomb", content: "1Box", rate: 550, discount: 80 },
+      { name: "Digital Bomb", content: "1Box", rate: 1000, discount: 80 },
+      { name: "Paper Bomb 0.25kg", content: "1Box", rate: 200, discount: 80 },
+      { name: "Paper Bomb 0.50kg", content: "1Box", rate: 400, discount: 80 },
+      { name: "Paper Bomb 1.00kg", content: "1Box", rate: 750, discount: 80 },
+      { name: "555 Bomb", content: "bpx", rate: 450, discount: 80 },
+      { name: "Jurassic bomb", content: "1BOX", rate: 800, discount: 80 },
+    ]
+  },
+  {
+    category: "Bijilli Crackers",
+    note: "80% OFF",
+    items: [
+      { name: "Red Bijilli 100 Pcs", content: "1Box", rate: 120, discount: 80 },
+      { name: "Stripped Bijilli 100 Pcs", content: "1Box", rate: 130, discount: 80 },
+    ]
+  },
+  {
+    category: "Kids Special Andfountain",
+    note: "80% OFF",
+    items: [
+      { name: "Kit Kat 10pcs)", content: "1Box", rate: 150, discount: 80 },
+      { name: "Peacock 3 Hole", content: "1Box", rate: 750, discount: 80 },
+      { name: "Peacock 5 Hole", content: "1Box", rate: 800, discount: 80 },
+      { name: "Bada Peacock", content: "1Box", rate: 1800, discount: 80 },
+      { name: "Night quail", content: "1BOX", rate: 500, discount: 80 },
+      { name: "Siren Big", content: "1Box", rate: 750, discount: 80 },
+      { name: "Disco Shower (5pcs) / Black bird", content: "1Box", rate: 500, discount: 80 },
+      { name: "Dancing Butterfly", content: "1Box", rate: 450, discount: 80 },
+      { name: "Benta (5pcs)", content: "1Box", rate: 800, discount: 80 },
+      { name: "Smoke (3pcs)", content: "1Box", rate: 750, discount: 80 },
+      { name: "8\" Fountain tin", content: "1Box", rate: 800, discount: 80 },
+      { name: "Magic Show", content: "1Box", rate: 1150, discount: 80 },
+      { name: "Helicopter", content: "1Box", rate: 500, discount: 80 },
+      { name: "Bambaram", content: "1Box", rate: 500, discount: 80 },
+      { name: "Photo Flash", content: "1Box", rate: 250, discount: 80 },
+      { name: "Water Falls", content: "1Box", rate: 675, discount: 80 },
+      { name: "Peacock feather", content: "1Box", rate: 550, discount: 80 },
+      { name: "Golden star", content: "1Box", rate: 550, discount: 80 },
+      { name: "Touch & Touch COOL", content: "1Box", rate: 1250, discount: 80 },
+      { name: "Tin beer", content: "1Box", rate: 400, discount: 80 },
+      { name: "Fountain Tin(2pcs)", content: "1Box", rate: 800, discount: 80 },
+    ]
+  },
+  {
+    category: "Repeatting Shots",
+    note: "80% OFF",
+    items: [
+      { name: "7 Shot / Fanta (5pcs)", content: "1Box", rate: 500, discount: 80 },
+      { name: "Party zone colour paper shot", content: "1Box", rate: 1500, discount: 80 },
+      { name: "12 Shot Crackling", content: "1Box", rate: 650, discount: 80 },
+      { name: "15 Shot TUKTUK THAILAND", content: "1Box", rate: 1250, discount: 80 },
+      { name: "30 Shot Multi Colour", content: "1Box", rate: 1850, discount: 80 },
+      { name: "60 Shot Multi Colour", content: "1Box", rate: 3700, discount: 80 },
+      { name: "120 Shot Multi Colour", content: "1Box", rate: 7000, discount: 80 },
+      { name: "240 Shot Multi Colour", content: "1Box", rate: 13500, discount: 80 },
+      { name: "25 Shot Multi Colour Crackling", content: "1Box", rate: 2250, discount: 80 },
+      { name: "25 Shot Rider", content: "1Box", rate: 1000, discount: 80 },
+      { name: "10*10 shot", content: "1pcs", rate: 16900, discount: 80 },
+      { name: "5*10 Rainbow sky", content: "1 box", rate: 9000, discount: 80 },
+      { name: "12 shot colour", content: "1box", rate: 900, discount: 80 },
+    ]
+  },
+  {
+    category: "Fancy Novelties",
+    note: "80% OFF",
+    items: [
+      { name: "Ganga Jamuna (5pcs)", content: "1Box", rate: 450, discount: 80 },
+      { name: "Sky Dancer (5 pcs)", content: "1Box", rate: 700, discount: 80 },
+    ]
+  },
+  {
+    category: "Fancy",
+    note: "80% OFF",
+    items: [
+      { name: "1\" Chotta Fancy", content: "1Box", rate: 180, discount: 80 },
+      { name: "2\" Fancy Out", content: "1Box", rate: 450, discount: 80 },
+      { name: "3.5 Gun out", content: "1Box", rate: 1150, discount: 80 },
+      { name: "3.5 Nayagara Falls", content: "1Box", rate: 1700, discount: 80 },
+      { name: "5\" Fancy", content: "1Box", rate: 2250, discount: 80 },
+      { name: "3.5\" Fancy", content: "1Box", rate: 1150, discount: 80 },
+      { name: "4\" Double ball", content: "1Box", rate: 1900, discount: 80 },
+      { name: "4\" fancy", content: "1Box", rate: 2000, discount: 80 },
+      { name: "5\" Fancy (2pcs) Benz", content: "1Box", rate: 4750, discount: 80 },
+      { name: "5\" FANCY (2PCS) CITY JUMBERS", content: "1Box", rate: 3250, discount: 80 },
+      { name: "3pcs Fancy", content: "1Box", rate: 1125, discount: 80 },
+      { name: "Wild force", content: "1 pcs", rate: 1500, discount: 80 },
+      { name: "4\" fancy (2pcs) Sunrise", content: "1 BOX", rate: 3000, discount: 80 },
+      { name: "6\" FANCY TURBO SERIES", content: "1Box", rate: 4000, discount: 80 },
+      { name: "6\" FANCY (2PCS) ULTRA", content: "2pcs", rate: 6250, discount: 80 },
+      { name: "3.5 Fancy strawberry (2pcs)", content: "(2pcs)", rate: 2000, discount: 80 },
+      { name: "3.5 fancy lemonlife (2pcs)", content: "2pcs", rate: 2000, discount: 80 },
+      { name: "NEO SERIES 2\" FANCY", content: "2Pcs", rate: 875, discount: 80 },
+      { name: "5\" color punch (2pcs)", content: "1 box", rate: 3500, discount: 80 },
+    ]
+  },
+  {
+    category: "Sparklers",
+    note: "80% OFF",
+    items: [
+      { name: "Dancing umberlla", content: "1Box", rate: 1000, discount: 80 },
+      { name: "10cm Electric Sparklers (5 box)", content: "1Box", rate: 425, discount: 80 },
+      { name: "10cm Colour Sparklers(5box)", content: "1Box", rate: 450, discount: 80 },
+      { name: "10cm Green Sparklers(5box)", content: "1Box", rate: 550, discount: 80 },
+      { name: "10cm Red Sparklers(5 box)", content: "1Box", rate: 550, discount: 80 },
+      { name: "15cm Electric Sparklers(2 boxes)", content: "2Box", rate: 400, discount: 80 },
+      { name: "15cm Colour Sparklers(2 boxes)", content: "2Box", rate: 420, discount: 80 },
+      { name: "15cm Green Sparklers(2 boxes)", content: "2Box", rate: 420, discount: 80 },
+      { name: "30cm Electric Sparklers(2 box)", content: "2Box", rate: 400, discount: 80 },
+      { name: "30cm Colour Sparklers(2 boxes)", content: "2Box", rate: 425, discount: 80 },
+      { name: "30cm Green Sparklers (2 boxes)", content: "2Box", rate: 450, discount: 80 },
+      { name: "50cm Electric Sparklers", content: "1Box", rate: 850, discount: 80 },
+      { name: "50cm Colour Sparklers", content: "1Box", rate: 900, discount: 80 },
+      { name: "10cm Yellow(5box)", content: "(5box)", rate: 475, discount: 80 },
+      { name: "50cm Green sparklers", content: "5pcs", rate: 975, discount: 80 },
+    ]
+  },
+  {
+    category: "Colour Matches",
+    note: "80% OFF",
+    items: [
+      { name: "Laptop Small", content: "1Box", rate: 650, discount: 80 },
+      { name: "Laptop Big", content: "1Box", rate: 1175, discount: 80 },
+    ]
+  },
+  {
+    category: "New varity",
+    note: "80% OFF",
+    items: [
+      { name: "Shin Chan", content: "1BOX", rate: 500, discount: 80 },
+      { name: "100 Watts", content: "1BOX", rate: 750, discount: 80 },
+      { name: "Dancing Umberla", content: "1BOX", rate: 1000, discount: 80 },
+      { name: "Jungle beat", content: "1BOX", rate: 550, discount: 80 },
+      { name: "HAPPY DIWALI (Money bank)", content: "1 box", rate: 650, discount: 80 },
+      { name: "cylinder bomb(2PCS)", content: "2 pcs", rate: 1500, discount: 80 },
+      { name: "Emu egg", content: "1 box", rate: 925, discount: 80 },
+      { name: "Pistel 5G", content: "1 box", rate: 1000, discount: 80 },
+      { name: "900 CC", content: "228", rate: 725, discount: 80 },
+      { name: "Kung Fu Panda", content: "1 box", rate: 800, discount: 80 },
+      { name: "I cone", content: "1Box", rate: 1000, discount: 80 },
+      { name: "black & white shower", content: "1Box", rate: 650, discount: 80 },
+      { name: "1000 Watts", content: "1pcs", rate: 1100, discount: 80 },
+      { name: "Mega crackling coconut", content: "3pcs", rate: 1750, discount: 80 },
+      { name: "Funny guys", content: "1 box", rate: 2000, discount: 80 },
+      { name: "cylinder", content: "1 pcs", rate: 900, discount: 80 },
+    ]
+  },
+  {
+    category: "Deluxe Crackers",
+    note: "80% OFF",
+    items: [
+      { name: "100 Deluxe", content: "1Box", rate: 900, discount: 80 },
+      { name: "50 Deluxe", content: "1Box", rate: 500, discount: 80 },
+    ]
+  },
+  {
+    category: "Gaint and other",
+    note: "80% OFF",
+    items: [
+      { name: "1k tajmahal Gold", content: "Box", rate: 1200, discount: 80 },
+      { name: "2k Gold", content: "Box", rate: 2400, discount: 80 },
+      { name: "5k Gold", content: "Box", rate: 6250, discount: 80 },
+      { name: "10k Gold", content: "Box", rate: 11500, discount: 80 },
+      { name: "100", content: "Box", rate: 150, discount: 80 },
+      { name: "28 chorsa (10 pkt)", content: "10 pkt", rate: 750, discount: 80 },
+    ]
+  },
+  {
+    category: "Night Show",
+    note: "80% OFF",
+    items: [
+      { name: "Lovely Peral", content: "Box", rate: 675, discount: 80 },
+      { name: "white gun shot (5pcs)", content: "Box", rate: 1000, discount: 80 },
+      { name: "Pentagon", content: "Box", rate: 1000, discount: 80 },
+      { name: "White House", content: "Box", rate: 1000, discount: 80 },
+    ]
+  },
+  {
+    category: "Crackling",
+    note: "80% OFF",
+    items: [
+      { name: "Pogo (5pcs)/jolly ranger", content: "1Box", rate: 750, discount: 80 },
+      { name: "White crackling", content: "1Box", rate: 800, discount: 80 },
+      { name: "Circus Jumping Chekkar", content: "1Box", rate: 900, discount: 80 },
+      { name: "Red and green crackling", content: "1Box", rate: 700, discount: 80 },
+      { name: "Green crackling", content: "1Box", rate: 750, discount: 80 },
+      { name: "Red crackling", content: "1Box", rate: 900, discount: 80 },
+      { name: "Gold crackling", content: "1Box", rate: 700, discount: 80 },
+      { name: "Colour rain/golden bar", content: "1 Box", rate: 550, discount: 80 },
+    ]
+  },
+  {
+    category: "Gift Box Collection",
+    note: "80% OFF",
+    items: [
+      { name: "25 Items", content: "Box", rate: 1550, discount: 80 },
+      { name: "30 Items", content: "Box", rate: 1900, discount: 80 },
+      { name: "40 Items", content: "Box", rate: 2750, discount: 80 },
+      { name: "50 Items", content: "Box", rate: 4000, discount: 80 },
+      { name: "60 Items", content: "Box", rate: 5500, discount: 80 },
+    ]
+  },
+  {
+    category: "Combo Offer",
+    note: "Net Rate",
+    items: [
+      { name: "3000 Family Pack", content: "1Box", rate: 3000, discount: 0 },
+      { name: "5000 Family Pack", content: "1Box", rate: 5000, discount: 0 },
+    ]
+  },
+  {
+    category: "Multicolour Repeating shot",
+    note: "80% OFF",
+    items: [
+      { name: "30 shot Multicolour BRAND", content: "Box", rate: 2300, discount: 80 },
+      { name: "60 Shot Multicolour BRAND", content: "Box", rate: 4600, discount: 80 },
+      { name: "120 Shot Multicolour BRAND", content: "Box", rate: 8750, discount: 80 },
+      { name: "240 shot Multicolour BRAND", content: "Box", rate: 17500, discount: 80 },
+      { name: "100 Shot BRAND Call me crazy", content: "1pcs", rate: 7400, discount: 80 },
+    ]
+  },
+  {
+    category: "CHUN MUN Crackling",
+    note: "Net Rate",
+    items: [
+      { name: "Mini Peral", content: "1BOX", rate: 180, discount: 0 },
+      { name: "Colour Changing", content: "1BOX", rate: 400, discount: 0 },
+      { name: "2 in 1", content: "1BOX", rate: 500, discount: 0 },
+      { name: "DELUXE", content: "1 box", rate: 700, discount: 0 },
+    ]
+  },
+];
+
+const fmt = n => "₹" + n.toLocaleString("en-IN", {maximumFractionDigits:0});
+const cart = {}; // id -> qty
+
+function finalRate(rate, discount){ return Math.round(rate * (1 - discount/100)); }
+
+
+function renderCategoryNav(){
+  const nav = document.getElementById('category-nav');
+  nav.innerHTML = CATALOG.map((cat, ci) =>
+    `<button type="button" data-cat="${ci}">${cat.category}</button>`
+  ).join('');
+  nav.addEventListener('click', e => {
+    const b = e.target.closest('button[data-cat]');
+    if (!b) return;
+    document.getElementById('cat-' + b.dataset.cat)?.scrollIntoView({behavior:'smooth', block:'start'});
+  });
+}
+
+function renderCatalog(){
+  const main = document.getElementById('catalog');
+  main.innerHTML = CATALOG.map((cat, ci) => `
+    <section class="cat">
+      <div class="cat-head"><h2>${escapeHtml(cat.category)}</h2><span>${escapeHtml(cat.note || '')}</span></div>
+      <table>
+        <thead><tr>
+          <th>Product</th><th class="num">Rate</th><th class="num">Final</th><th class="num">Qty</th><th class="num">Amount</th>
+        </tr></thead>
+        <tbody>
+          ${cat.items.map((it, ii) => {
+            const id = ci + '-' + ii;
+            const fr = finalRate(it.rate, it.discount);
+            const available = String(it.status || 'AVAILABLE').toUpperCase() !== 'SOLD OUT';
+            return \`<tr class="${available ? '' : 'sold-out-row'}">
+              <td class="pname">${escapeHtml(it.name)}<span class="pcontent">${escapeHtml(it.content)}</span>${available ? '' : '<span class="sold-badge">SOLD OUT</span>'}</td>
+              <td class="num"><span class="rate-old">${fmt(it.rate)}</span></td>
+              <td class="num rate-final">${fmt(fr)}</td>
+              <td class="num">
+                <div class="qty">
+                  <button type="button" aria-label="Decrease" data-act="dec" data-id="${id}" ${available ? '' : 'disabled'}>−</button>
+                  <input inputmode="numeric" value="0" data-id="${id}" data-rate="${fr}" data-name="${escapeHtml(it.name)}" data-category="${escapeHtml(cat.category)}" data-content="${escapeHtml(it.content)}" ${available ? '' : 'disabled'}>
+                  <button type="button" aria-label="Increase" data-act="inc" data-id="${id}" ${available ? '' : 'disabled'}>+</button>
+                </div>
+              </td>
+              <td class="num"><span class="amount" data-amt="${id}">₹0</span></td>
+            </tr>\`;
+          }).join('')}
+        </tbody>
+      </table>
+    </section>
+  `).join('');
+}
+
+function updateRow(id){
+  const input = document.querySelector(`input[data-id="${id}"]`);
+  let qty = parseInt(input.value, 10);
+  if (isNaN(qty) || qty < 0) qty = 0;
+  input.value = qty;
+  const rate = parseInt(input.dataset.rate, 10);
+  cart[id] = {
+    qty, rate,
+    name: input.dataset.name,
+    category: input.dataset.category || "",
+    content: input.dataset.content || ""
+  };
+  document.querySelector(`[data-amt="${id}"]`).textContent = fmt(qty * rate);
+  updateTotals();
+}
+
+function updateTotals(){
+  let total = 0, count = 0;
+  Object.values(cart).forEach(c => { total += c.qty * c.rate; count += c.qty; });
+  document.getElementById('grand-total').textContent = fmt(total);
+  document.getElementById('item-count').textContent = count + (count === 1 ? " item" : " items");
+  document.getElementById('bar-total').textContent = fmt(total);
+  document.getElementById('bar-count').textContent = count + (count === 1 ? " item in cart" : " items in cart");
+  const btn = document.getElementById('order-btn');
+  btn.disabled = count === 0;
+}
+
+
+function selectedItems(){
+  return Object.values(cart).filter(c => c.qty > 0);
+}
+
+function openOrderModal(){
+  const items = selectedItems();
+  if (!items.length) return;
+
+  const list = document.getElementById('selected-list');
+  list.innerHTML = items.map(c => `
+    <div class="selected-row">
+      <div>
+        <div class="selected-name">${escapeHtml(c.name)}</div>
+        <div class="selected-meta">${escapeHtml(c.category)} · ${escapeHtml(c.content)} · ${fmt(c.rate)} each · Qty ${c.qty}</div>
+      </div>
+      <div class="selected-amount">${fmt(c.qty * c.rate)}</div>
+    </div>
+  `).join('');
+
+  let total = items.reduce((sum,c) => sum + c.qty * c.rate, 0);
+  document.getElementById('confirm-total').textContent = fmt(total);
+  document.getElementById('order-modal').classList.add('open');
+  document.getElementById('customer-name').focus();
+}
+
+function closeOrderModal(){
+  document.getElementById('order-modal').classList.remove('open');
+}
+
+function escapeHtml(value){
+  return String(value).replace(/[&<>"']/g, ch => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[ch]));
+}
+
+let currentOrder = null;
+
+function makeOrderNumber(){
+  const d=new Date();
+  const pad=n=>String(n).padStart(2,'0');
+  const base=`MC-${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}`;
+  const key='mc-order-seq-'+base;
+  const seq=(parseInt(localStorage.getItem(key)||'0',10)+1);
+  localStorage.setItem(key,String(seq));
+  return `${base}-${String(seq).padStart(3,'0')}`;
+}
+
+function collectOrder(){
+  const customerName=document.getElementById('customer-name').value.trim();
+  const phone=document.getElementById('customer-phone').value.trim();
+  const address=document.getElementById('customer-address').value.trim();
+  const note=document.getElementById('customer-note').value.trim();
+  const items=selectedItems();
+  const total=items.reduce((sum,c)=>sum+c.qty*c.rate,0);
+  return {orderNo:makeOrderNumber(),date:new Date(),customerName,phone,address,note,items,total};
+}
+
+function shortItemName(name){
+  // WhatsApp order list: keep the item column short and easy to scan.
+  // Exactly the first 10 characters are shown; the full product name remains in the website catalogue.
+  return String(name).replace(/\s+/g,' ').trim().slice(0,10);
+}
+
+function buildMessage(order){
+  const lines=[
+    '🔥 *MURUGAN CRACKERS — NEW ORDER*',
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+    `Order No : ${order.orderNo}`,
+    `Customer : ${order.customerName}`,
+    `Phone    : ${order.phone}`,
+    `Address  : ${order.address}`,
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+    '*ITEMS*',
+    '```',
+    'NO QTY ITEM        AMOUNT'
+  ];
+
+  order.items.forEach((item,i)=>{
+    const no=String(i+1).padStart(2,'0');
+    const qty=String(item.qty).padStart(3,' ');
+    const name=shortItemName(item.name).padEnd(10,' ');
+    const amount=fmt(item.qty*item.rate).padStart(8,' ');
+    lines.push(`${no} ${qty} ${name}  ${amount}`);
+  });
+
+  lines.push('```');
+  lines.push('━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  lines.push(`*TOTAL : ${fmt(order.total)}*`);
+  if(order.note) {
+    lines.push('');
+    lines.push(`Note : ${order.note}`);
+  }
+  lines.push('');
+  lines.push('Please confirm stock availability and delivery details.');
+  return lines.join('\n');
+}
+
+function validateCustomer(){
+  const name=document.getElementById('customer-name').value.trim();
+  const phone=document.getElementById('customer-phone').value.replace(/\D/g,'');
+  const address=document.getElementById('customer-address').value.trim();
+  if(!name){alert('Please enter customer name.');return false;}
+  if(phone.length!==10){alert('Please enter a valid 10-digit phone number.');return false;}
+  if(!address){alert('Please enter the delivery/contact address.');return false;}
+  return true;
+}
+
+function confirmOrder(){
+  if(!validateCustomer()) return;
+  currentOrder=collectOrder();
+  const msg=encodeURIComponent(buildMessage(currentOrder));
+  closeOrderModal();
+  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`,'_blank');
+}
+
+
+async function loadProducts(){
+  try{
+    const res = await fetch('products.csv?ts=' + Date.now(), {cache:'no-store'});
+    if(!res.ok) throw new Error('products.csv not found');
+    const text = await res.text();
+    const rows = parseCSV(text);
+    const grouped = new Map();
+    rows.forEach(r=>{
+      if(!r.category || !r.name) return;
+      if(!grouped.has(r.category)) grouped.set(r.category,{category:r.category,note:(Number(r.discount)||0)>0 ? (Number(r.discount)+'% OFF') : 'Net Rate',items:[]});
+      grouped.get(r.category).items.push({
+        name:r.name, content:r.content||'', rate:Number(r.rate)||0, discount:Number(r.discount)||0,
+        status:(r.status||'AVAILABLE').trim().toUpperCase()
+      });
+    });
+    if(grouped.size){
+      CATALOG.length=0;
+      grouped.forEach(v=>CATALOG.push(v));
+    }
+  }catch(err){
+    console.warn('Live product data unavailable; using bundled catalogue.', err);
+  }
+  renderCategoryNav();
+  renderCatalog();
+}
+function parseCSV(text){
+  const lines=[]; let row=[], cell='', quoted=false;
+  for(let i=0;i<text.length;i++){
+    const ch=text[i], next=text[i+1];
+    if(quoted){
+      if(ch==='"' && next==='"'){cell+='"';i++;}
+      else if(ch==='"') quoted=false;
+      else cell+=ch;
+    }else{
+      if(ch==='"') quoted=true;
+      else if(ch===','){row.push(cell);cell='';}
+      else if(ch==='\n'){row.push(cell);lines.push(row);row=[];cell='';}
+      else if(ch!=='\r') cell+=ch;
+    }
+  }
+  if(cell!=='' || row.length){row.push(cell);lines.push(row);}
+  if(!lines.length) return [];
+  const headers=lines.shift().map(h=>h.trim());
+  return lines.map(r=>Object.fromEntries(headers.map((h,i)=>[h,(r[i]??'').trim()])));
+}
+
+document.addEventListener('click', e => {
+  const btn=e.target.closest('button[data-act]');
+  if(btn){const input=document.querySelector(`input[data-id="${btn.dataset.id}"]`);let v=parseInt(input.value,10)||0;v=btn.dataset.act==='inc'?v+1:Math.max(0,v-1);input.value=v;updateRow(btn.dataset.id);return;}
+  if(e.target.id==='order-btn'&&!e.target.disabled){openOrderModal();return;}
+  if(e.target.id==='modal-close'||e.target.id==='modal-cancel'){closeOrderModal();return;}
+  if(e.target.id==='confirm-order'){confirmOrder();return;}
+});
+
+document.addEventListener('input',e=>{if(e.target.matches('input[data-id]'))updateRow(e.target.dataset.id);});
+document.getElementById('order-modal').addEventListener('click',e=>{if(e.target.id==='order-modal')closeOrderModal();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeOrderModal();});
+
+loadProducts();
+</script>
+</body>
+</html>
