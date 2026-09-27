@@ -265,22 +265,25 @@
   .payment-share input[type=file]{max-width:100%;font-size:.78rem;}
   .btn-share-payment{background:#25D366;color:#07351f;border:0;border-radius:8px;padding:11px 15px;font:600 .88rem 'IBM Plex Sans',sans-serif;cursor:pointer;}
   .btn-share-payment:disabled{opacity:.45;cursor:not-allowed;}
+  .language-switch{display:flex;justify-content:flex-end;gap:6px;margin-bottom:18px;}
+  .lang-btn{border:1px solid rgba(228,200,119,.65);background:transparent;color:var(--gold-soft);padding:7px 12px;border-radius:999px;cursor:pointer;font:600 .78rem 'IBM Plex Sans',sans-serif;}
+  .lang-btn.active{background:var(--gold-soft);color:var(--maroon-deep);}
 </style>
 </head>
 <body>
 
 <div class="cover">
   <div class="cover-inner">
-    <span class="stamp">✦ Diwali Price List — Season Discount</span>
+    <div class="language-switch" role="group" aria-label="Language"><button type="button" class="lang-btn active" data-lang="en">English</button><button type="button" class="lang-btn" data-lang="ta">தமிழ்</button></div><span class="stamp" id="stamp-text">✦ Diwali Price List — Season Discount</span>
     <h1>Chendurmurugan Crackers</h1>
-    <p class="tagline">Direct from Sivakasi. Sound crackers, sparklers, aerial fancy &amp; gift boxes at wholesale rates.</p>
+    <p class="tagline" id="tagline-text">Direct from Sivakasi. Sound crackers, sparklers, aerial fancy &amp; gift boxes at wholesale rates.</p>
     <div class="shop-contact">
       
       <a href="https://wa.me/918838203303" target="_blank" rel="noopener">WhatsApp: 8838203303</a>
     </div>
     <div class="cover-meta">
-      <div><b id="item-count">0 items</b>selected</div>
-      <div><b id="grand-total">₹0</b>estimated total</div>
+      <div><b id="item-count">0 items</b><span id="selected-label">selected</span></div>
+      <div><b id="grand-total">₹0</b><span id="estimated-label">estimated total</span></div>
     </div>
   </div>
 </div>
@@ -288,7 +291,7 @@
 <div class="category-nav" id="category-nav" aria-label="Product categories"></div>
 <main id="catalog"></main>
 
-<footer>Prices and product names are taken from the supplied Chendurmurugan Crackers price list. Stock and final delivery details will be confirmed by WhatsApp. Sale of fireworks is subject to local regulations — please sell only permitted varieties within licensed timings.</footer><div class="owner-tools"><a href="https://github.com/chendurmurugan/murugan-crackers/edit/main/products.csv" target="_blank" rel="noopener">OWNER: UPDATE PRICE / STOCK</a></div>
+<footer id="footer-text">Prices and product names are taken from the supplied Chendurmurugan Crackers price list. Stock and final delivery details will be confirmed by WhatsApp. Sale of fireworks is subject to local regulations — please sell only permitted varieties within licensed timings.</footer><div class="owner-tools"><a href="https://github.com/chendurmurugan/murugan-crackers/edit/main/products.csv" target="_blank" rel="noopener">OWNER: UPDATE PRICE / STOCK</a></div>
 
 <div class="orderbar">
   <div class="orderbar-inner">
@@ -303,49 +306,49 @@
     <div class="modal-head">
       <div>
         <h2 id="order-title">Confirm Your Order</h2>
-        <div class="help-note">Please enter your details so we can identify and confirm your order.</div>
+        <div class="help-note" id="order-help">Please enter your details so we can identify and confirm your order.</div>
       </div>
       <button class="modal-close" id="modal-close" type="button" aria-label="Close">×</button>
     </div>
 
-    <div class="selected-title">Selected Items</div>
+    <div class="selected-title" id="selected-title">Selected Items</div>
     <div class="selected-list" id="selected-list"></div>
 
     <div class="customer-grid">
       <div class="field">
-        <label for="customer-name">Customer Name *</label>
+        <label for="customer-name" id="customer-name-label">Customer Name *</label>
         <input id="customer-name" type="text" placeholder="Enter your name" autocomplete="name">
       </div>
       <div class="field">
-        <label for="customer-phone">Phone Number *</label>
+        <label for="customer-phone" id="customer-phone-label">Phone Number *</label>
         <input id="customer-phone" type="tel" placeholder="10-digit mobile number" inputmode="tel" autocomplete="tel">
       </div>
       <div class="field full">
-        <label for="customer-address">Delivery / Contact Address *</label>
+        <label for="customer-address" id="customer-address-label">Delivery / Contact Address *</label>
         <textarea id="customer-address" placeholder="Enter your complete address" autocomplete="street-address"></textarea>
       </div>
       <div class="field full">
-        <label for="customer-note">Additional Note (optional)</label>
+        <label for="customer-note" id="customer-note-label">Additional Note (optional)</label>
         <input id="customer-note" type="text" placeholder="Delivery preference, landmark, etc.">
       </div>
     </div>
 
     <div class="confirm-total">
-      <span>Order Total</span>
+      <span id="order-total-label">Order Total</span>
       <b id="confirm-total">₹0</b>
     </div>
 
 
     <div class="payment-box">
-      <h3>💳 Payment — GPay</h3>
+      <h3 id="payment-title">💳 Payment — GPay</h3>
       <div><span class="payment-number">8838203303</span><span class="payment-name">— Parthiban</span></div>
-      <div class="payment-note">Please complete the payment for your confirmed order using GPay.</div>
-      <div class="payment-warning">⚠️ After payment, share the payment screenshot on WhatsApp. Items will be shipped only after the payment screenshot is received and the payment is verified.</div>
+      <div class="payment-note" id="payment-note">Please complete the payment for your confirmed order using GPay.</div>
+      <div class="payment-warning" id="payment-warning">⚠️ After payment, share the payment screenshot on WhatsApp. Items will be shipped only after the payment screenshot is received and the payment is verified.</div>
       <div class="payment-share">
         <input id="payment-screenshot" type="file" accept="image/*">
         <button class="btn-share-payment" id="share-payment" type="button" disabled>📤 Share Payment Screenshot</button>
       </div>
-      <div class="help-note">Select your payment screenshot, then tap “Share Payment Screenshot”.</div>
+      <div class="help-note" id="payment-help">Select your payment screenshot, then tap “Share Payment Screenshot”.</div>
     </div>
     <div class="confirm-actions">
       <button class="btn-cancel" id="modal-cancel" type="button">Back to Products</button>
@@ -357,6 +360,29 @@
 <script>
 // ---- Replace with the shop's real WhatsApp number (country code + number, no + or spaces) ----
 const WHATSAPP_NUMBER = "918838203303";
+const LANGUAGE_KEY = "cmc-language";
+let currentLanguage = localStorage.getItem(LANGUAGE_KEY) || "en";
+const UI_TEXT = {
+ en:{stamp:"✦ Diwali Price List — Season Discount",tagline:"Direct from Sivakasi. Sound crackers, sparklers, aerial fancy & gift boxes at wholesale rates.",selected:"selected",estimated:"estimated total",whatsapp:"WhatsApp: 8838203303",products:"Product",rate:"Rate",final:"Final",qty:"Qty",amount:"Amount",soldOut:"SOLD OUT",item:"item",items:"items",cartItem:"item in cart",cartItems:"items in cart",order:"Send Order on WhatsApp",confirm:"Confirm Your Order",orderHelp:"Please enter your details so we can identify and confirm your order.",selectedItems:"Selected Items",customerName:"Customer Name *",customerPhone:"Phone Number *",address:"Delivery / Contact Address *",note:"Additional Note (optional)",namePlaceholder:"Enter your name",phonePlaceholder:"10-digit mobile number",addressPlaceholder:"Enter your complete address",notePlaceholder:"Delivery preference, landmark, etc.",orderTotal:"Order Total",payment:"💳 Payment — GPay",paymentNote:"Please complete the payment for your confirmed order using GPay.",paymentWarning:"⚠️ After payment, share the payment screenshot on WhatsApp. Items will be shipped only after the payment screenshot is received and the payment is verified.",sharePayment:"📤 Share Payment Screenshot",paymentHelp:"Select your payment screenshot, then tap “Share Payment Screenshot”.",back:"Back to Products",confirmSend:"✓ Confirm Order & Send on WhatsApp",owner:"OWNER: UPDATE PRICE / STOCK",footer:"Prices and product names are taken from the supplied Chendurmurugan Crackers price list. Stock and final delivery details will be confirmed by WhatsApp. Sale of fireworks is subject to local regulations — please sell only permitted varieties within licensed timings.",alertName:"Please enter customer name.",alertPhone:"Please enter a valid 10-digit phone number.",alertAddress:"Please enter the delivery/contact address.",alertScreenshot:"Please select the payment screenshot first.",shareAttach:"WhatsApp opened. Please attach the selected payment screenshot and send it.",shareAttach2:"WhatsApp opened. Please attach the payment screenshot and send it."},
+ ta:{stamp:"✦ தீபாவளி விலைப்பட்டியல் — சிறப்பு தள்ளுபடி",tagline:"சிவகாசியில் இருந்து நேரடியாக. பட்டாசுகள், ஸ்பார்க்லர்கள், வானவேடிக்கைகள் மற்றும் கிஃப்ட் பாக்ஸ்கள் மொத்த விலையில்.",selected:"தேர்வு",estimated:"மதிப்பிடப்பட்ட தொகை",whatsapp:"WhatsApp: 8838203303",products:"பொருள்",rate:"விலை",final:"இறுதி விலை",qty:"அளவு",amount:"தொகை",soldOut:"விற்றுத் தீர்ந்தது",item:"பொருள்",items:"பொருட்கள்",cartItem:"பொருள் கார்ட்டில்",cartItems:"பொருட்கள் கார்ட்டில்",order:"WhatsApp-ல் ஆர்டர் அனுப்பவும்",confirm:"ஆர்டரை உறுதிப்படுத்தவும்",orderHelp:"ஆர்டரை உறுதிப்படுத்த உங்கள் விவரங்களை உள்ளிடவும்.",selectedItems:"தேர்வு செய்யப்பட்ட பொருட்கள்",customerName:"வாடிக்கையாளர் பெயர் *",customerPhone:"தொலைபேசி எண் *",address:"டெலிவரி / தொடர்பு முகவரி *",note:"கூடுதல் குறிப்பு (விருப்பம்)",namePlaceholder:"உங்கள் பெயரை உள்ளிடவும்",phonePlaceholder:"10 இலக்க மொபைல் எண்",addressPlaceholder:"முழு முகவரியை உள்ளிடவும்",notePlaceholder:"டெலிவரி விவரம், அடையாள இடம் போன்றவை",orderTotal:"மொத்த ஆர்டர் தொகை",payment:"💳 பணம் செலுத்துதல் — GPay",paymentNote:"உங்கள் ஆர்டருக்கான தொகையை GPay மூலம் செலுத்தவும்.",paymentWarning:"⚠️ பணம் செலுத்திய பிறகு payment screenshot-ஐ WhatsApp-ல் பகிரவும். Screenshot பெறப்பட்டு பணம் சரிபார்க்கப்பட்ட பிறகே பொருட்கள் அனுப்பப்படும்.",sharePayment:"📤 Payment Screenshot பகிரவும்",paymentHelp:"Payment screenshot-ஐ தேர்வு செய்து “Payment Screenshot பகிரவும்” என்பதை அழுத்தவும்.",back:"பொருட்களுக்குத் திரும்பு",confirmSend:"✓ ஆர்டரை உறுதிப்படுத்தி WhatsApp-ல் அனுப்பவும்",owner:"OWNER: விலை / STOCK மாற்றம்",footer:"விலைகள் மற்றும் பொருட்களின் பெயர்கள் வழங்கப்பட்ட Chendurmurugan Crackers விலைப்பட்டியலிலிருந்து எடுக்கப்பட்டவை. Stock மற்றும் இறுதி டெலிவரி விவரங்கள் WhatsApp மூலம் உறுதிப்படுத்தப்படும். பட்டாசு விற்பனை உள்ளூர் விதிமுறைகளுக்கு உட்பட்டது.",alertName:"வாடிக்கையாளர் பெயரை உள்ளிடவும்.",alertPhone:"சரியான 10 இலக்க தொலைபேசி எண்ணை உள்ளிடவும்.",alertAddress:"டெலிவரி / தொடர்பு முகவரியை உள்ளிடவும்.",alertScreenshot:"முதலில் payment screenshot-ஐ தேர்வு செய்யவும்.",shareAttach:"WhatsApp திறக்கப்பட்டுள்ளது. தேர்வு செய்த payment screenshot-ஐ இணைத்து அனுப்பவும்.",shareAttach2:"WhatsApp திறக்கப்பட்டுள்ளது. Payment screenshot-ஐ இணைத்து அனுப்பவும்."}
+};
+const CATEGORY_TA={"One Sound Crackers":"ஒரு சத்த பட்டாசுகள்","Ground Crackers":"தரையில் சுற்றும் பட்டாசுகள்","Flower Pots":"பூந்தொட்டிகள்","Twinkling Star":"மின்னும் நட்சத்திரம்","Pencils":"பென்சில் பட்டாசுகள்","Rocket":"ராக்கெட்","Auto Bombs":"ஆட்டோ பாம்","Fancy":"ஃபேன்சி","Fancy Novelties":"ஃபேன்சி புதுமைகள்","Sparklers":"கம்பி மத்தாப்பு","Colour Matches":"வண்ண தீக்குச்சிகள்","New varity":"புதிய வகைகள்","Deluxe Crackers":"டீலக்ஸ் பட்டாசுகள்","Gaint and other":"பெரிய மற்றும் பிற வகைகள்","Night Show":"நைட் ஷோ","Crackling":"கிராக்கிளிங்","Gift Box Collection":"கிஃப்ட் பாக்ஸ் தொகுப்பு","Combo Offer":"காம்போ ஆஃபர்","Multicolour Repeating shot":"பல வண்ண ரிப்பீட்டிங் ஷாட்","CHUN MUN Crackling":"சுன் முன் கிராக்கிளிங்"};
+const T=k=>UI_TEXT[currentLanguage][k]||UI_TEXT.en[k]||k;
+const categoryLabel=n=>currentLanguage==="ta"?(CATEGORY_TA[n]||n):n;
+function applyLanguage(){
+document.documentElement.lang=currentLanguage==="ta"?"ta":"en";
+document.getElementById("stamp-text").textContent=T("stamp");document.getElementById("tagline-text").textContent=T("tagline");document.getElementById("selected-label").textContent=T("selected");document.getElementById("estimated-label").textContent=T("estimated");
+document.querySelector(".shop-contact a").textContent=T("whatsapp");document.getElementById("footer-text").textContent=T("footer");document.getElementById("order-btn").textContent=T("order");
+document.getElementById("order-title").textContent=T("confirm");document.getElementById("order-help").textContent=T("orderHelp");document.getElementById("selected-title").textContent=T("selectedItems");
+document.getElementById("customer-name-label").textContent=T("customerName");document.getElementById("customer-phone-label").textContent=T("customerPhone");document.getElementById("customer-address-label").textContent=T("address");document.getElementById("customer-note-label").textContent=T("note");
+document.getElementById("customer-name").placeholder=T("namePlaceholder");document.getElementById("customer-phone").placeholder=T("phonePlaceholder");document.getElementById("customer-address").placeholder=T("addressPlaceholder");document.getElementById("customer-note").placeholder=T("notePlaceholder");
+document.getElementById("order-total-label").textContent=T("orderTotal");document.getElementById("payment-title").textContent=T("payment");document.getElementById("payment-note").textContent=T("paymentNote");document.getElementById("payment-warning").textContent=T("paymentWarning");
+document.getElementById("share-payment").textContent=T("sharePayment");document.getElementById("payment-help").textContent=T("paymentHelp");document.getElementById("modal-cancel").textContent=T("back");document.getElementById("confirm-order").textContent=T("confirmSend");
+document.querySelector(".owner-tools a").textContent=T("owner");document.querySelectorAll(".lang-btn").forEach(b=>b.classList.toggle("active",b.dataset.lang===currentLanguage));
+renderCategoryNav();renderCatalog();updateTotals();
+}
+function setLanguage(lang){currentLanguage=lang==="ta"?"ta":"en";localStorage.setItem(LANGUAGE_KEY,currentLanguage);applyLanguage();}
+
 
 const CATALOG = [
   {
@@ -687,7 +713,7 @@ function finalRate(rate, discount){ return Math.round(rate * (1 - discount/100))
 function renderCategoryNav(){
   const nav = document.getElementById('category-nav');
   nav.innerHTML = CATALOG.map((cat, ci) =>
-    `<button type="button" data-cat="${ci}">${cat.category}</button>`
+    `<button type="button" data-cat="${ci}">${escapeHtml(categoryLabel(cat.category))}</button>`
   ).join('');
   nav.addEventListener('click', e => {
     const b = e.target.closest('button[data-cat]');
@@ -700,10 +726,10 @@ function renderCatalog(){
   const main = document.getElementById('catalog');
   main.innerHTML = CATALOG.map((cat, ci) => `
     <section class="cat">
-      <div class="cat-head"><h2>${escapeHtml(cat.category)}</h2><span>${escapeHtml(cat.note || '')}</span></div>
+      <div class="cat-head"><h2>${escapeHtml(categoryLabel(cat.category))}</h2><span>${escapeHtml(cat.note || '')}</span></div>
       <table>
         <thead><tr>
-          <th>Product</th><th class="num">Rate</th><th class="num">Final</th><th class="num">Qty</th><th class="num">Amount</th>
+          <th>${T("products")}</th><th class="num">${T("rate")}</th><th class="num">${T("final")}</th><th class="num">${T("qty")}</th><th class="num">${T("amount")}</th>
         </tr></thead>
         <tbody>
           ${cat.items.map((it, ii) => {
@@ -711,7 +737,7 @@ function renderCatalog(){
             const fr = finalRate(it.rate, it.discount);
             const available = String(it.status || 'AVAILABLE').toUpperCase() !== 'SOLD OUT';
             return `<tr class="${available ? '' : 'sold-out-row'}">
-              <td class="pname">${escapeHtml(it.name)}<span class="pcontent">${escapeHtml(it.content)}</span>${available ? '' : '<span class="sold-badge">SOLD OUT</span>'}</td>
+              <td class="pname">${escapeHtml(it.name)}<span class="pcontent">${escapeHtml(it.content)}</span>${available ? '' : '<span class="sold-badge">${T("soldOut")}</span>'}</td>
               <td class="num"><span class="rate-old">${fmt(it.rate)}</span></td>
               <td class="num rate-final">${fmt(fr)}</td>
               <td class="num">
@@ -750,9 +776,9 @@ function updateTotals(){
   let total = 0, count = 0;
   Object.values(cart).forEach(c => { total += c.qty * c.rate; count += c.qty; });
   document.getElementById('grand-total').textContent = fmt(total);
-  document.getElementById('item-count').textContent = count + (count === 1 ? " item" : " items");
+  document.getElementById('item-count').textContent = count + " " + (count === 1 ? T("item") : T("items"));
   document.getElementById('bar-total').textContent = fmt(total);
-  document.getElementById('bar-count').textContent = count + (count === 1 ? " item in cart" : " items in cart");
+  document.getElementById('bar-count').textContent = count + " " + (count === 1 ? T("cartItem") : T("cartItems"));
   const btn = document.getElementById('order-btn');
   btn.disabled = count === 0;
 }
@@ -771,7 +797,7 @@ function openOrderModal(){
     <div class="selected-row">
       <div>
         <div class="selected-name">${escapeHtml(c.name)}</div>
-        <div class="selected-meta">${escapeHtml(c.category)} · ${escapeHtml(c.content)} · ${fmt(c.rate)} each · Qty ${c.qty}</div>
+        <div class="selected-meta">${escapeHtml(categoryLabel(c.category))} · ${escapeHtml(c.content)} · ${fmt(c.rate)} ${currentLanguage==="ta" ? "ஒவ்வொன்றும்" : "each"} · ${currentLanguage==="ta" ? "அளவு" : "Qty"} ${c.qty}</div>
       </div>
       <div class="selected-amount">${fmt(c.qty * c.rate)}</div>
     </div>
@@ -822,17 +848,18 @@ function shortItemName(name){
 }
 
 function buildMessage(order){
+  const ta=currentLanguage==="ta";
   const lines=[
-    '🔥 *ChendurMurugan Crackers — NEW ORDER*',
+    ta ? '🔥 *ChendurMurugan Crackers — புதிய ஆர்டர்*' : '🔥 *ChendurMurugan Crackers — NEW ORDER*',
     '━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
-    `Order No : ${order.orderNo}`,
-    `Customer : ${order.customerName}`,
-    `Phone    : ${order.phone}`,
-    `Address  : ${order.address}`,
+    `${ta ? "ஆர்டர் எண்" : "Order No"} : ${order.orderNo}`,
+    `${ta ? "வாடிக்கையாளர்" : "Customer"} : ${order.customerName}`,
+    `${ta ? "தொலைபேசி" : "Phone"} : ${order.phone}`,
+    `${ta ? "முகவரி" : "Address"} : ${order.address}`,
     '━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
-    '*ITEMS*',
+    ta ? '*பொருட்கள்*' : '*ITEMS*',
     '```',
-    'NO QTY ITEM        AMOUNT'
+    ta ? 'எண் அளவு பொருள்       தொகை' : 'NO QTY ITEM        AMOUNT'
   ];
 
   order.items.forEach((item,i)=>{
@@ -845,18 +872,18 @@ function buildMessage(order){
 
   lines.push('```');
   lines.push('━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-  lines.push(`*TOTAL : ${fmt(order.total)}*`);
+  lines.push(`*${ta ? "மொத்தம்" : "TOTAL"} : ${fmt(order.total)}*`);
   lines.push('');
-  lines.push('*PAYMENT*');
+  lines.push(ta ? '*பணம் செலுத்துதல்*' : '*PAYMENT*');
   lines.push('GPay : 8838203303 (Parthiban)');
-  lines.push('After payment, please share the payment screenshot on WhatsApp.');
-  lines.push('Shipment will be made only after screenshot is received and payment is verified.');
+  lines.push(ta ? 'பணம் செலுத்திய பிறகு payment screenshot-ஐ WhatsApp-ல் பகிரவும்.' : 'After payment, please share the payment screenshot on WhatsApp.');
+  lines.push(ta ? 'Screenshot பெறப்பட்டு பணம் சரிபார்க்கப்பட்ட பிறகே பொருட்கள் அனுப்பப்படும்.' : 'Shipment will be made only after screenshot is received and payment is verified.');
   if(order.note) {
     lines.push('');
-    lines.push(`Note : ${order.note}`);
+    lines.push(`${ta ? "குறிப்பு" : "Note"} : ${order.note}`);
   }
   lines.push('');
-  lines.push('Please confirm stock availability and delivery details.');
+  lines.push(ta ? 'Stock மற்றும் delivery விவரங்களை உறுதிப்படுத்தவும்.' : 'Please confirm stock availability and delivery details.');
   return lines.join('\n');
 }
 
@@ -864,9 +891,9 @@ function validateCustomer(){
   const name=document.getElementById('customer-name').value.trim();
   const phone=document.getElementById('customer-phone').value.replace(/\D/g,'');
   const address=document.getElementById('customer-address').value.trim();
-  if(!name){alert('Please enter customer name.');return false;}
-  if(phone.length!==10){alert('Please enter a valid 10-digit phone number.');return false;}
-  if(!address){alert('Please enter the delivery/contact address.');return false;}
+  if(!name){alert(T("alertName"));return false;}
+  if(phone.length!==10){alert(T("alertPhone"));return false;}
+  if(!address){alert(T("alertAddress"));return false;}
   return true;
 }
 
@@ -936,6 +963,7 @@ document.addEventListener('click', e => {
 document.addEventListener('input',e=>{if(e.target.matches('input[data-id]'))updateRow(e.target.dataset.id);});
 document.getElementById('order-modal').addEventListener('click',e=>{if(e.target.id==='order-modal')closeOrderModal();});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeOrderModal();});
+document.querySelectorAll(".lang-btn").forEach(b=>b.addEventListener("click",()=>setLanguage(b.dataset.lang)));
 
 
 document.getElementById('payment-screenshot').addEventListener('change', e => {
@@ -946,7 +974,7 @@ document.getElementById('share-payment').addEventListener('click', async () => {
   const input = document.getElementById('payment-screenshot');
   const file = input.files && input.files[0];
   if (!file) {
-    alert('Please select the payment screenshot first.');
+    alert(T("alertScreenshot"));
     return;
   }
 
@@ -959,16 +987,16 @@ document.getElementById('share-payment').addEventListener('click', async () => {
       await navigator.share({title:'Payment Screenshot', text, files:[file]});
     } else {
       window.open('https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(text), '_blank');
-      alert('WhatsApp opened. Please attach the selected payment screenshot and send it.');
+      alert(T("shareAttach"));
     }
   } catch (err) {
     if (err && err.name === 'AbortError') return;
     window.open('https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(text), '_blank');
-    alert('WhatsApp opened. Please attach the payment screenshot and send it.');
+    alert(T("shareAttach2"));
   }
 });
 
-loadProducts();
+loadProducts().then(()=>applyLanguage());
 </script>
 </body>
 </html>
