@@ -268,6 +268,10 @@
   .language-switch{display:flex;justify-content:flex-end;gap:6px;margin-bottom:18px;}
   .lang-btn{border:1px solid rgba(228,200,119,.65);background:transparent;color:var(--gold-soft);padding:7px 12px;border-radius:999px;cursor:pointer;font:600 .78rem 'IBM Plex Sans',sans-serif;}
   .lang-btn.active{background:var(--gold-soft);color:var(--maroon-deep);}
+
+  .product-name-ta{display:none;}
+  body.lang-ta .product-name-en{display:none;}
+  body.lang-ta .product-name-ta{display:inline;}
 </style>
 </head>
 <body>
@@ -737,13 +741,13 @@ function renderCatalog(){
             const fr = finalRate(it.rate, it.discount);
             const available = String(it.status || 'AVAILABLE').toUpperCase() !== 'SOLD OUT';
             return `<tr class="${available ? '' : 'sold-out-row'}">
-              <td class="pname">${escapeHtml(it.name)}<span class="pcontent">${escapeHtml(it.content)}</span>${available ? '' : '<span class="sold-badge">${T("soldOut")}</span>'}</td>
+              <td class="pname"><span class="product-name-en">${escapeHtml(it.name)}</span><span class="product-name-ta">${escapeHtml(it.name_ta||it.name)}</span><span class="pcontent">${escapeHtml(it.content)}</span>${available ? '' : '<span class="sold-badge">${T("soldOut")}</span>'}</td>
               <td class="num"><span class="rate-old">${fmt(it.rate)}</span></td>
               <td class="num rate-final">${fmt(fr)}</td>
               <td class="num">
                 <div class="qty">
                   <button type="button" aria-label="Decrease" data-act="dec" data-id="${id}" ${available ? '' : 'disabled'}>−</button>
-                  <input inputmode="numeric" value="0" data-id="${id}" data-rate="${fr}" data-name="${escapeHtml(it.name)}" data-category="${escapeHtml(cat.category)}" data-content="${escapeHtml(it.content)}" ${available ? '' : 'disabled'}>
+                  <input inputmode="numeric" value="0" data-id="${id}" data-rate="${fr}" data-name="${escapeHtml(it.name)}" data-name-ta="${escapeHtml(it.name_ta||it.name)}" data-category="${escapeHtml(cat.category)}" data-content="${escapeHtml(it.content)}" ${available ? '' : 'disabled'}>
                   <button type="button" aria-label="Increase" data-act="inc" data-id="${id}" ${available ? '' : 'disabled'}>+</button>
                 </div>
               </td>
@@ -765,6 +769,7 @@ function updateRow(id){
   cart[id] = {
     qty, rate,
     name: input.dataset.name,
+    name_ta: input.dataset.nameTa || input.dataset.name,
     category: input.dataset.category || "",
     content: input.dataset.content || ""
   };
@@ -796,7 +801,7 @@ function openOrderModal(){
   list.innerHTML = items.map(c => `
     <div class="selected-row">
       <div>
-        <div class="selected-name">${escapeHtml(c.name)}</div>
+        <div class="selected-name">${escapeHtml(currentLanguage==="ta" ? (c.name_ta||c.name) : c.name)}</div>
         <div class="selected-meta">${escapeHtml(categoryLabel(c.category))} · ${escapeHtml(c.content)} · ${fmt(c.rate)} ${currentLanguage==="ta" ? "ஒவ்வொன்றும்" : "each"} · ${currentLanguage==="ta" ? "அளவு" : "Qty"} ${c.qty}</div>
       </div>
       <div class="selected-amount">${fmt(c.qty * c.rate)}</div>
@@ -844,7 +849,7 @@ function collectOrder(){
 function shortItemName(name){
   // WhatsApp order list: keep the item column short and easy to scan.
   // Exactly the first 10 characters are shown; the full product name remains in the website catalogue.
-  return String(name).replace(/\s+/g,' ').trim().slice(0,10);
+  return String(name).replace(/\s+/g," ").trim().slice(0,10);
 }
 
 function buildMessage(order){
@@ -865,7 +870,8 @@ function buildMessage(order){
   order.items.forEach((item,i)=>{
     const no=String(i+1).padStart(2,'0');
     const qty=String(item.qty).padStart(3,' ');
-    const name=shortItemName(item.name).padEnd(10,' ');
+    const displayName=currentLanguage==="ta" ? (item.name_ta||item.name) : item.name;
+    const name=shortItemName(displayName).padEnd(10," ");
     const amount=fmt(item.qty*item.rate).padStart(8,' ');
     lines.push(`${no} ${qty} ${name}  ${amount}`);
   });
@@ -915,9 +921,10 @@ async function loadProducts(){
     const grouped = new Map();
     rows.forEach(r=>{
       if(!r.category || !r.name) return;
-      if(!grouped.has(r.category)) grouped.set(r.category,{category:r.category,note:(Number(r.discount)||0)>0 ? (Number(r.discount)+'% OFF') : 'Net Rate',items:[]});
+      if(!grouped.has(r.category)) grouped.set(r.category,{category:r.category,category_ta:r.category_ta||r.category,note:(Number(r.discount)||0)>0 ? (Number(r.discount)+'% OFF') : 'Net Rate',items:[]});
       grouped.get(r.category).items.push({
-        name:r.name, content:r.content||'', rate:Number(r.rate)||0, discount:Number(r.discount)||0,
+        name:r.name, name_ta:r.name_ta||r.name, category_ta:r.category_ta||r.category,
+        content:r.content||'', rate:Number(r.rate)||0, discount:Number(r.discount)||0,
         status:(r.status||'AVAILABLE').trim().toUpperCase()
       });
     });
