@@ -254,6 +254,17 @@
   .qty button:disabled,.qty input:disabled{opacity:.35;cursor:not-allowed;}
   .owner-tools{text-align:center;margin:24px auto 100px;font-size:.8rem;}
   .owner-tools a{color:var(--maroon);font-weight:700;text-decoration:none;border-bottom:1px dashed var(--maroon);}
+
+  .payment-box{margin-top:16px;padding:16px;border:2px solid var(--gold);border-radius:12px;background:rgba(200,155,60,.10);}
+  .payment-box h3{margin:0 0 8px;font-size:1.2rem;color:var(--maroon);}
+  .payment-number{font-size:1.25rem;font-weight:700;letter-spacing:.03em;}
+  .payment-name{font-weight:600;margin-left:6px;}
+  .payment-note{font-size:.82rem;line-height:1.5;margin-top:8px;}
+  .payment-warning{margin-top:10px;padding:10px;border-radius:8px;background:rgba(107,20,32,.10);font-weight:700;line-height:1.4;}
+  .payment-share{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+  .payment-share input[type=file]{max-width:100%;font-size:.78rem;}
+  .btn-share-payment{background:#25D366;color:#07351f;border:0;border-radius:8px;padding:11px 15px;font:600 .88rem 'IBM Plex Sans',sans-serif;cursor:pointer;}
+  .btn-share-payment:disabled{opacity:.45;cursor:not-allowed;}
 </style>
 </head>
 <body>
@@ -324,6 +335,18 @@
       <b id="confirm-total">₹0</b>
     </div>
 
+
+    <div class="payment-box">
+      <h3>💳 Payment — GPay</h3>
+      <div><span class="payment-number">8838203303</span><span class="payment-name">— Parthiban</span></div>
+      <div class="payment-note">Please complete the payment for your confirmed order using GPay.</div>
+      <div class="payment-warning">⚠️ After payment, share the payment screenshot on WhatsApp. Items will be shipped only after the payment screenshot is received and the payment is verified.</div>
+      <div class="payment-share">
+        <input id="payment-screenshot" type="file" accept="image/*">
+        <button class="btn-share-payment" id="share-payment" type="button" disabled>📤 Share Payment Screenshot</button>
+      </div>
+      <div class="help-note">Select your payment screenshot, then tap “Share Payment Screenshot”.</div>
+    </div>
     <div class="confirm-actions">
       <button class="btn-cancel" id="modal-cancel" type="button">Back to Products</button>
       <button class="btn-whatsapp" id="confirm-order" type="button">✓ Confirm Order &amp; Send on WhatsApp</button>
@@ -823,6 +846,11 @@ function buildMessage(order){
   lines.push('```');
   lines.push('━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   lines.push(`*TOTAL : ${fmt(order.total)}*`);
+  lines.push('');
+  lines.push('*PAYMENT*');
+  lines.push('GPay : 8838203303 (Parthiban)');
+  lines.push('After payment, please share the payment screenshot on WhatsApp.');
+  lines.push('Shipment will be made only after screenshot is received and payment is verified.');
   if(order.note) {
     lines.push('');
     lines.push(`Note : ${order.note}`);
@@ -908,6 +936,37 @@ document.addEventListener('click', e => {
 document.addEventListener('input',e=>{if(e.target.matches('input[data-id]'))updateRow(e.target.dataset.id);});
 document.getElementById('order-modal').addEventListener('click',e=>{if(e.target.id==='order-modal')closeOrderModal();});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeOrderModal();});
+
+
+document.getElementById('payment-screenshot').addEventListener('change', e => {
+  document.getElementById('share-payment').disabled = !e.target.files.length;
+});
+
+document.getElementById('share-payment').addEventListener('click', async () => {
+  const input = document.getElementById('payment-screenshot');
+  const file = input.files && input.files[0];
+  if (!file) {
+    alert('Please select the payment screenshot first.');
+    return;
+  }
+
+  const text = currentOrder
+    ? 'Payment screenshot for Order ' + currentOrder.orderNo + ' — GPay 8838203303 (Parthiban). Please verify payment before shipping.'
+    : 'Payment screenshot — GPay 8838203303 (Parthiban). Please verify payment before shipping.';
+
+  try {
+    if (navigator.share && (!navigator.canShare || navigator.canShare({files:[file]}))) {
+      await navigator.share({title:'Payment Screenshot', text, files:[file]});
+    } else {
+      window.open('https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(text), '_blank');
+      alert('WhatsApp opened. Please attach the selected payment screenshot and send it.');
+    }
+  } catch (err) {
+    if (err && err.name === 'AbortError') return;
+    window.open('https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(text), '_blank');
+    alert('WhatsApp opened. Please attach the payment screenshot and send it.');
+  }
+});
 
 loadProducts();
 </script>
