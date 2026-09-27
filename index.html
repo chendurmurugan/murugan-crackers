@@ -375,6 +375,7 @@ const T=k=>UI_TEXT[currentLanguage][k]||UI_TEXT.en[k]||k;
 const categoryLabel=n=>currentLanguage==="ta"?(CATEGORY_TA[n]||n):n;
 function applyLanguage(){
 document.documentElement.lang=currentLanguage==="ta"?"ta":"en";
+document.body.classList.toggle("lang-ta", currentLanguage==="ta");
 document.getElementById("stamp-text").textContent=T("stamp");document.getElementById("tagline-text").textContent=T("tagline");document.getElementById("selected-label").textContent=T("selected");document.getElementById("estimated-label").textContent=T("estimated");
 document.querySelector(".shop-contact a").textContent=T("whatsapp");document.getElementById("footer-text").textContent=T("footer");document.getElementById("order-btn").textContent=T("order");
 document.getElementById("order-title").textContent=T("confirm");document.getElementById("order-help").textContent=T("orderHelp");document.getElementById("selected-title").textContent=T("selectedItems");
