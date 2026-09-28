@@ -9,13 +9,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --maroon:#6B1420;
-    --maroon-deep:#4A0E17;
-    --gold:#C89B3C;
-    --gold-soft:#E4C877;
-    --cream:#FBF3E4;
-    --ink:#241C15;
-    --green:#33463B;
+    --maroon:#D71920;
+    --maroon-deep:#FFF1F1;
+    --gold:#E6A400;
+    --gold-soft:#F2B705;
+    --cream:#FFFFFF;
+    --ink:#242424;
+    --green:#237A3B;
     --line: rgba(36,28,20,0.18);
     box-sizing:border-box;
     padding-top:env(safe-area-inset-top,0px);
@@ -26,7 +26,7 @@
   html,body{height:100%;}
   body{
     margin:0;
-    background:var(--cream);
+    background:#FFFFFF;
     color:var(--ink);
     font-family:'IBM Plex Sans',system-ui,sans-serif;
     -webkit-font-smoothing:antialiased;
@@ -38,7 +38,7 @@
     background:
       radial-gradient(circle at 18% 20%, rgba(200,155,60,0.18), transparent 45%),
       linear-gradient(180deg,var(--maroon) 0%, var(--maroon-deep) 100%);
-    color:var(--cream);
+    color:var(--ink);
     padding:56px 20px 40px;
     position:relative;
   }
@@ -46,7 +46,7 @@
   .stamp{
     display:inline-flex;align-items:center;gap:8px;
     border:1.5px solid var(--gold-soft);
-    color:var(--gold-soft);
+    color:var(--maroon);
     padding:5px 14px;
     border-radius:999px;
     font-size:0.78rem;
@@ -62,7 +62,7 @@
   .cover p.tagline{
     margin:0 0 26px;
     font-size:1.05rem;
-    color:var(--gold-soft);
+    color:var(--maroon);
     max-width:38ch;
   }
   .cover-meta{
@@ -72,18 +72,18 @@
     font-size:0.86rem;
     color:rgba(251,243,228,0.75);
   }
-  .cover-meta b{color:var(--gold-soft);display:block;font-size:1.15rem;font-family:'Fraunces',serif;font-weight:600;}
+  .cover-meta b{color:var(--maroon);display:block;font-size:1.15rem;font-family:'Fraunces',serif;font-weight:600;}
 
 
   .shop-contact{
     display:flex;flex-wrap:wrap;gap:10px 18px;
     margin-top:14px;font-size:.9rem;color:rgba(251,243,228,.86);
   }
-  .shop-contact a{color:var(--gold-soft);text-decoration:none;font-weight:600}
+  .shop-contact a{color:var(--maroon);text-decoration:none;font-weight:600}
   .category-nav{
     max-width:780px;margin:0 auto;padding:14px 20px 0;
     display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;
-    position:sticky;top:0;z-index:10;background:var(--cream);
+    position:sticky;top:0;z-index:10;background:#FFFFFF;
   }
   .category-nav::-webkit-scrollbar{display:none}
   .category-nav button{
@@ -99,14 +99,14 @@
   .pcontent{font-size:.78rem;opacity:.62;margin-top:3px;}
   table{table-layout:auto;}
   .cat table th:first-child,.cat table td:first-child{width:42%;}
-  .orderbar button.cta{background:#25D366;color:#07351f;}
+  .orderbar button.cta{background:#25D366;color:#07351f;box-shadow:0 2px 8px rgba(0,0,0,.10);}
   .modal-backdrop{
-    position:fixed;inset:0;background:rgba(20,12,8,.68);z-index:100;
+    position:fixed;inset:0;background:rgba(0,0,0,.42);z-index:100;
     display:none;align-items:center;justify-content:center;padding:18px;
   }
   .modal-backdrop.open{display:flex;}
   .order-modal{
-    width:min(720px,100%);max-height:90vh;overflow:auto;background:var(--cream);
+    width:min(720px,100%);max-height:90vh;overflow:auto;background:#FFFFFF;
     color:var(--ink);border-radius:14px;box-shadow:0 20px 70px rgba(0,0,0,.35);
     padding:22px;
   }
@@ -121,7 +121,7 @@
   .field label{font-size:.78rem;font-weight:600;opacity:.72;}
   .field input,.field textarea{
     width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:8px;
-    background:rgba(255,255,255,.55);color:var(--ink);font:inherit;
+    background:#FFFFFF;color:var(--ink);font:inherit;
   }
   .field textarea{min-height:78px;resize:vertical;}
   .selected-title{font-weight:600;margin:10px 0 8px;}
@@ -136,7 +136,7 @@
     margin-top:14px;padding:13px 0;border-top:2px solid var(--ink);}
   .confirm-total b{font-family:'Fraunces',serif;font-size:1.35rem;color:var(--maroon);}
 
-  .pdf-actions{margin-top:16px;padding:14px;border:1px solid var(--line);border-radius:10px;background:rgba(200,155,60,.08)}
+  .pdf-actions{margin-top:16px;padding:14px;border:1px solid var(--line);border-radius:10px;background:#FFF9E8}
   .pdf-success{font-weight:600;color:var(--green);margin-bottom:10px}
   .pdf-action-row{display:flex;gap:10px;flex-wrap:wrap}
   .btn-pdf,.pdf-action-row .btn-whatsapp{border:none;border-radius:8px;padding:11px 15px;font-weight:600;cursor:pointer}
@@ -146,10 +146,10 @@
   .confirm-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:14px;}
   .confirm-actions button{border:0;border-radius:8px;padding:12px 18px;font:600 .92rem 'IBM Plex Sans',sans-serif;cursor:pointer;}
   .btn-cancel{background:transparent;border:1px solid var(--line)!important;color:var(--ink);}
-  .btn-whatsapp{background:#25D366;color:#07351f;}
+  .btn-whatsapp{background:#25D366;color:#07351f;box-shadow:0 2px 8px rgba(0,0,0,.10);}
   .help-note{font-size:.75rem;opacity:.62;margin-top:8px;}
   .pdf-preview{margin-top:14px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff;}
-  .pdf-preview-head{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:rgba(200,155,60,.10);font-size:.82rem;font-weight:600;}
+  .pdf-preview-head{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:#FFF7DD;font-size:.82rem;font-weight:600;}
   .pdf-preview iframe{display:block;width:100%;height:430px;border:0;background:#fff;}
   .open-pdf{background:transparent;color:var(--maroon);border:1px solid var(--maroon)!important;border-radius:8px;padding:7px 10px;font:600 .78rem 'IBM Plex Sans',sans-serif;cursor:pointer;}
   @media(max-width:560px){
@@ -191,7 +191,7 @@
   }
   .qty button{
     width:26px;height:26px;border-radius:6px;border:1px solid var(--line);
-    background:#fff;color:var(--ink);font-size:1rem;line-height:1;cursor:pointer;
+    background:#FFFFFF;color:var(--ink);font-size:1rem;line-height:1;cursor:pointer;
   }
   .qty button:active{background:var(--gold-soft);}
   .qty input{
@@ -209,7 +209,7 @@
   /* ---- Sticky order bar ---- */
   .orderbar{
     position:fixed;left:0;right:0;bottom:0;
-    background:var(--ink);color:var(--cream);
+    background:var(--ink);color:var(--ink);
     padding:14px 20px calc(14px + env(safe-area-inset-bottom,0px));
     display:flex;align-items:center;justify-content:center;
     z-index:20;
@@ -219,7 +219,7 @@
     display:flex;align-items:center;justify-content:space-between;gap:16px;
   }
   .orderbar .totals{font-size:0.9rem;}
-  .orderbar .totals b{font-family:'Fraunces',serif;font-size:1.3rem;color:var(--gold-soft);display:block;}
+  .orderbar .totals b{font-family:'Fraunces',serif;font-size:1.3rem;color:var(--maroon);display:block;}
   .orderbar button.cta{
     background:#25D366;color:#0b3320;border:none;
     font-weight:600;font-size:0.95rem;
@@ -242,7 +242,7 @@
       --ink:#F1E9DA;
       --line: rgba(241,233,218,0.18);
     }
-    body{background:var(--cream);}
+    body{background:#FFFFFF;}
     tbody td{border-color:var(--line);}
     .qty input{color:var(--ink);}
     .qty button{background:#2A251E;border-color:var(--line);color:var(--ink);}
@@ -263,10 +263,10 @@
   .payment-warning{margin-top:10px;padding:10px;border-radius:8px;background:rgba(107,20,32,.10);font-weight:700;line-height:1.4;}
   .payment-share{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
   .payment-share input[type=file]{max-width:100%;font-size:.78rem;}
-  .btn-share-payment{background:#25D366;color:#07351f;border:0;border-radius:8px;padding:11px 15px;font:600 .88rem 'IBM Plex Sans',sans-serif;cursor:pointer;}
+  .btn-share-payment{background:#25D366;color:#07351f;box-shadow:0 2px 8px rgba(0,0,0,.10);border:0;border-radius:8px;padding:11px 15px;font:600 .88rem 'IBM Plex Sans',sans-serif;cursor:pointer;}
   .btn-share-payment:disabled{opacity:.45;cursor:not-allowed;}
   .language-switch{display:flex;justify-content:flex-end;gap:6px;margin-bottom:18px;}
-  .lang-btn{border:1px solid rgba(228,200,119,.65);background:transparent;color:var(--gold-soft);padding:7px 12px;border-radius:999px;cursor:pointer;font:600 .78rem 'IBM Plex Sans',sans-serif;}
+  .lang-btn{border:1px solid rgba(228,200,119,.65);background:transparent;color:var(--maroon);padding:7px 12px;border-radius:999px;cursor:pointer;font:600 .78rem 'IBM Plex Sans',sans-serif;}
   .lang-btn.active{background:var(--gold-soft);color:var(--maroon-deep);}
 
   .product-name-ta{display:none;}
