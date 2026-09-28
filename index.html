@@ -36,9 +36,9 @@
   /* ---- Hero / ledger cover ---- */
   .cover{
     background:
-      radial-gradient(circle at 18% 20%, rgba(200,155,60,0.18), transparent 45%),
-      linear-gradient(180deg,var(--maroon) 0%, var(--maroon-deep) 100%);
-    color:var(--ink);
+      radial-gradient(circle at 18% 20%, rgba(230,164,0,0.16), transparent 45%),
+      linear-gradient(180deg,#FFF7E6 0%, #FFFFFF 100%);
+    color:#242424;
     padding:56px 20px 40px;
     position:relative;
   }
@@ -70,7 +70,7 @@
     border-top:1px solid rgba(228,200,119,0.3);
     padding-top:18px;
     font-size:0.86rem;
-    color:rgba(251,243,228,0.75);
+    color:#555555;
   }
   .cover-meta b{color:var(--maroon);display:block;font-size:1.15rem;font-family:'Fraunces',serif;font-weight:600;}
 
@@ -209,7 +209,7 @@
   /* ---- Sticky order bar ---- */
   .orderbar{
     position:fixed;left:0;right:0;bottom:0;
-    background:var(--ink);color:var(--ink);
+    background:#FFF4D6;color:#242424;
     padding:14px 20px calc(14px + env(safe-area-inset-bottom,0px));
     display:flex;align-items:center;justify-content:center;
     z-index:20;
@@ -234,18 +234,6 @@
     .orderbar button.cta{padding:11px 16px;font-size:0.88rem;}
     thead th:nth-child(2), td:nth-child(2){display:none;}
     .pname{min-width:0;}
-  }
-
-  @media (prefers-color-scheme: dark){
-    :root:not([data-theme="light"]){
-      --cream:#1B1712;
-      --ink:#F1E9DA;
-      --line: rgba(241,233,218,0.18);
-    }
-    body{background:#FFFFFF;}
-    tbody td{border-color:var(--line);}
-    .qty input{color:var(--ink);}
-    .qty button{background:#2A251E;border-color:var(--line);color:var(--ink);}
   }
 
 
