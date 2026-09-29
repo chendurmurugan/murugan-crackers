@@ -281,9 +281,6 @@
       <div><b id="item-count">0 items</b><span id="selected-label">selected</span></div>
       <div><b id="grand-total">₹0</b><span id="estimated-label">estimated total</span></div>
     </div>
-    <div class="price-list-download">
-      <button type="button" id="download-price-list">📄 Download Price List PDF</button>
-    </div>
   </div>
 </div>
 
@@ -375,7 +372,6 @@ const categoryLabel=n=>currentLanguage==="ta"?((CATALOG.find(c=>c.category===n)?
 function applyLanguage(){
 document.documentElement.lang=currentLanguage==="ta"?"ta":"en";
 document.body.classList.toggle("lang-ta", currentLanguage==="ta");
-document.getElementById("download-price-list").textContent=currentLanguage==="ta"?"📄 விலைப்பட்டியலை PDF ஆக பதிவிறக்கவும்":"📄 Download Price List PDF";
 document.getElementById("stamp-text").textContent=T("stamp");document.getElementById("tagline-text").textContent=T("tagline");document.getElementById("selected-label").textContent=T("selected");document.getElementById("estimated-label").textContent=T("estimated");
 document.querySelector(".shop-contact a").textContent=T("whatsapp");document.getElementById("footer-text").textContent=T("footer");document.getElementById("order-btn").textContent=T("order");
 document.getElementById("order-title").textContent=T("confirm");document.getElementById("order-help").textContent=T("orderHelp");document.getElementById("selected-title").textContent=T("selectedItems");
@@ -1016,8 +1012,7 @@ function parseCSV(text){
   return lines.map(r=>Object.fromEntries(headers.map((h,i)=>[h,(r[i]??'').trim()])));
 }
 
-document.getElementById("download-price-list").addEventListener("click", downloadPriceListPDF);
-document.getElementById("download-price-list-bottom").addEventListener("click", downloadPriceListPDF);
+document.getElementById("download-price-list-bottom")?.addEventListener("click", downloadPriceListPDF);
 
 document.addEventListener('click', e => {
   const btn=e.target.closest('button[data-act]');
