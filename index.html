@@ -231,6 +231,8 @@
   }
   .orderbar button.cta:disabled{opacity:0.4;cursor:default;}
   .orderbar button.cta:not(:disabled):active{transform:scale(0.98);}
+  .orderbar .download-pdf{background:#FFFFFF;color:var(--maroon);border:1px solid var(--maroon);font-weight:600;font-size:.9rem;padding:11px 16px;border-radius:8px;cursor:pointer;white-space:nowrap;}
+  .orderbar .download-pdf:active{transform:scale(.98);}
 
   @media (max-width:480px){
     .orderbar .totals b{font-size:1.1rem;}
@@ -293,7 +295,10 @@
 <div class="orderbar">
   <div class="orderbar-inner">
     <div class="totals"><b id="bar-total">₹0</b><span id="bar-count">0 items in cart</span></div>
-    <button class="cta" id="order-btn" disabled>Send Order on WhatsApp</button>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end">
+      <button class="download-pdf" id="download-price-list-bottom" type="button">📄 Download PDF</button>
+      <button class="cta" id="order-btn" disabled>Send Order on WhatsApp</button>
+    </div>
   </div>
 </div>
 
@@ -1012,6 +1017,7 @@ function parseCSV(text){
 }
 
 document.getElementById("download-price-list").addEventListener("click", downloadPriceListPDF);
+document.getElementById("download-price-list-bottom").addEventListener("click", downloadPriceListPDF);
 
 document.addEventListener('click', e => {
   const btn=e.target.closest('button[data-act]');
