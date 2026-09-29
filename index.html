@@ -73,6 +73,9 @@
     color:#555555;
   }
   .cover-meta b{color:var(--maroon);display:block;font-size:1.15rem;font-family:'Fraunces',serif;font-weight:600;}
+  .price-list-download{margin-top:18px;display:flex;justify-content:flex-start;}
+  .price-list-download button{border:1.5px solid var(--maroon);background:#FFFFFF;color:var(--maroon);padding:10px 16px;border-radius:999px;cursor:pointer;font:600 .86rem 'IBM Plex Sans',sans-serif;box-shadow:0 2px 7px rgba(0,0,0,.06);}
+  .price-list-download button:hover{background:#FFF1F1;}
 
 
   .shop-contact{
@@ -276,6 +279,9 @@
       <div><b id="item-count">0 items</b><span id="selected-label">selected</span></div>
       <div><b id="grand-total">₹0</b><span id="estimated-label">estimated total</span></div>
     </div>
+    <div class="price-list-download">
+      <button type="button" id="download-price-list">📄 Download Price List PDF</button>
+    </div>
   </div>
 </div>
 
@@ -364,6 +370,7 @@ const categoryLabel=n=>currentLanguage==="ta"?((CATALOG.find(c=>c.category===n)?
 function applyLanguage(){
 document.documentElement.lang=currentLanguage==="ta"?"ta":"en";
 document.body.classList.toggle("lang-ta", currentLanguage==="ta");
+document.getElementById("download-price-list").textContent=currentLanguage==="ta"?"📄 விலைப்பட்டியலை PDF ஆக பதிவிறக்கவும்":"📄 Download Price List PDF";
 document.getElementById("stamp-text").textContent=T("stamp");document.getElementById("tagline-text").textContent=T("tagline");document.getElementById("selected-label").textContent=T("selected");document.getElementById("estimated-label").textContent=T("estimated");
 document.querySelector(".shop-contact a").textContent=T("whatsapp");document.getElementById("footer-text").textContent=T("footer");document.getElementById("order-btn").textContent=T("order");
 document.getElementById("order-title").textContent=T("confirm");document.getElementById("order-help").textContent=T("orderHelp");document.getElementById("selected-title").textContent=T("selectedItems");
@@ -374,8 +381,63 @@ document.getElementById("share-payment").textContent=T("sharePayment");document.
 document.querySelector(".owner-tools a").textContent=T("owner");document.querySelectorAll(".lang-btn").forEach(b=>b.classList.toggle("active",b.dataset.lang===currentLanguage));
 renderCategoryNav();renderCatalog();updateTotals();
 }
-function setLanguage(lang){currentLanguage=lang==="ta"?"ta":"en";localStorage.setItem(LANGUAGE_KEY,currentLanguage);applyLanguage();}
-
+function downloadPriceListPDF(){
+  const rows=[];
+  CATALOG.forEach(cat=>{
+    rows.push({type:"category",text:cat.category,note:cat.note||""});
+    (cat.items||[]).forEach(it=>rows.push({type:"item",name:it.name||"",content:it.content||"",rate:Number(it.rate)||0,final:Number(it.final_rate)||finalRate(Number(it.rate)||0,Number(it.discount)||0)}));
+  });
+  const W=595,H=842,margin=36;
+  const esc=s=>String(s).replace(/\\/g,"\\\\").replace(/\\(/g,"\\(").replace(/\\)/g,"\\)");
+  const money=n=>"Rs. "+Number(n||0).toLocaleString("en-IN",{maximumFractionDigits:0});
+  const wrap=(s,max)=>{const words=String(s).split(/\\s+/),out=[];let line="";words.forEach(w=>{const test=line?line+" "+w:w;if(test.length>max){if(line)out.push(line);line=w;}else line=test;});if(line)out.push(line);return out.length?out:[""];};
+  const pages=[];let page=[];let used=0;
+  const add=(o,h)=>{if(used+h>52){pages.push(page);page=[];used=0;}page.push(o);used+=h;};
+  add({kind:"title",text:"CHENDURMURUGAN CRACKERS"},2);
+  add({kind:"subtitle",text:"PRICE LIST - SEASON DISCOUNT"},2);
+  add({kind:"normal",text:"Contact / WhatsApp: 8838203303"},1);
+  add({kind:"normal",text:"Current online catalogue price list"},1);
+  add({kind:"rule"},1);
+  rows.forEach(r=>{
+    if(r.type==="category"){add({kind:"category",text:r.text.toUpperCase()+(r.note?" - "+r.note:"")},2);}
+    else {const w=wrap(r.name,42);add({kind:"item",name:w[0],content:r.content,rate:money(r.rate),final:money(r.final)},1);for(let i=1;i<w.length;i++)add({kind:"normal",text:"  "+w[i]},1);}
+  });
+  if(page.length)pages.push(page);
+  const objs=[];const obj=s=>{objs.push(s);return objs.length;};
+  const f1=obj("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>");
+  const f2=obj("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>");
+  const pageIds=[];
+  pages.forEach((pg,pi)=>{
+    let y=800,stream="";
+    const txt=(s,x,size,font)=>{stream+="BT /"+font+" "+size+" Tf "+x+" "+y+" Td ("+esc(s)+") Tj ET\\n";};
+    pg.forEach(o=>{
+      if(o.kind==="rule"){stream+="0.5 w "+margin+" "+y+" m "+(W-margin)+" "+y+" l S\\n";y-=10;}
+      else if(o.kind==="item"){txt(o.name,margin,8.5,"F1");txt(o.content,310,8,"F1");txt(o.rate,390,8,"F1");txt(o.final,475,8,"F2");y-=13;}
+      else if(o.kind==="title"){txt(o.text,margin,17,"F2");y-=22;}
+      else if(o.kind==="subtitle"){txt(o.text,margin,10.5,"F2");y-=16;}
+      else if(o.kind==="category"){txt(o.text,margin,10,"F2");y-=16;}
+      else {txt(o.text,margin,8,"F1");y-=11;}
+    });
+    stream+="0.5 w "+margin+" 30 m "+(W-margin)+" 30 l S\\n";
+    const footer="Chendurmurugan Crackers - Price List";stream+="BT /F1 7 Tf "+margin+" 18 Td ("+esc(footer)+") Tj ET\\n";
+    stream+="BT /F1 7 Tf "+(W-80)+" 18 Td (Page "+(pi+1)+") Tj ET\\n";
+    const cid=obj("<< /Length "+stream.length+" >>\\nstream\\n"+stream+"endstream");
+    pageIds.push({cid:cid});
+  });
+  const pagesId=obj("PAGES_PLACEHOLDER");
+  const realPageIds=[];
+  pageIds.forEach(p=>{realPageIds.push(obj("<< /Type /Page /Parent "+pagesId+" 0 R /MediaBox [0 0 "+W+" "+H+"] /Resources << /Font << /F1 "+f1+" 0 R /F2 "+f2+" 0 R >> >> /Contents "+p.cid+" 0 R >>"));});
+  objs[pagesId-1]="<< /Type /Pages /Kids ["+realPageIds.map(id=>id+" 0 R").join(" ")+"] /Count "+realPageIds.length+" >>";
+  const root=obj("<< /Type /Catalog /Pages "+pagesId+" 0 R >>");
+  let pdf="%PDF-1.4\\n",offsets=[0];
+  objs.forEach((o,i)=>{offsets.push(pdf.length);pdf+=(i+1)+" 0 obj\\n"+o+"\\nendobj\\n";});
+  const xref=pdf.length;pdf+="xref\\n0 "+(objs.length+1)+"\\n0000000000 65535 f \\n";
+  for(let i=1;i<offsets.length;i++)pdf+=String(offsets[i]).padStart(10,"0")+" 00000 n \\n";
+  pdf+="trailer\\n<< /Size "+(objs.length+1)+" /Root "+root+" 0 R >>\\nstartxref\\n"+xref+"\\n%%EOF";
+  const blob=new Blob([pdf],{type:"application/pdf"});const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");a.href=url;a.download="Chendurmurugan-Crackers-Price-List.pdf";document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
 
 const CATALOG = [
   {
@@ -948,6 +1010,8 @@ function parseCSV(text){
   const headers=lines.shift().map(h=>h.trim());
   return lines.map(r=>Object.fromEntries(headers.map((h,i)=>[h,(r[i]??'').trim()])));
 }
+
+document.getElementById("download-price-list").addEventListener("click", downloadPriceListPDF);
 
 document.addEventListener('click', e => {
   const btn=e.target.closest('button[data-act]');
