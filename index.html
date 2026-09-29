@@ -334,6 +334,7 @@
     <div class="payment-box">
       <h3 id="payment-title">💳 Payment — GPay</h3>
       <div><span class="payment-number">8838203303</span><span class="payment-name">— Parthiban</span></div>
+      <div style="margin-top:6px"><span class="payment-number">7010242730</span><span class="payment-name">— Ponmanaraj.I</span></div>
       <div class="payment-note" id="payment-note">Please complete the payment for your confirmed order using GPay.</div>
       <div class="payment-warning" id="payment-warning">⚠️ After payment, share the payment screenshot on WhatsApp. Items will be shipped only after the payment screenshot is received and the payment is verified.</div>
       <div class="payment-share">
@@ -360,7 +361,7 @@ const UI_TEXT = {
 };
 const CATEGORY_TA={"One Sound Crackers":"ஒரு சத்த பட்டாசுகள்","Ground Crackers":"தரையில் சுற்றும் பட்டாசுகள்","Flower Pots":"பூந்தொட்டிகள்","Twinkling Star":"மின்னும் நட்சத்திரம்","Pencils":"பென்சில் பட்டாசுகள்","Rocket":"ராக்கெட்","Auto Bombs":"ஆட்டோ பாம்","Fancy":"ஃபேன்சி","Fancy Novelties":"ஃபேன்சி புதுமைகள்","Sparklers":"கம்பி மத்தாப்பு","Colour Matches":"வண்ண தீக்குச்சிகள்","New varity":"புதிய வகைகள்","Deluxe Crackers":"டீலக்ஸ் பட்டாசுகள்","Gaint and other":"பெரிய மற்றும் பிற வகைகள்","Night Show":"நைட் ஷோ","Crackling":"கிராக்கிளிங்","Gift Box Collection":"கிஃப்ட் பாக்ஸ் தொகுப்பு","Combo Offer":"காம்போ ஆஃபர்","Multicolour Repeating shot":"பல வண்ண ரிப்பீட்டிங் ஷாட்","CHUN MUN Crackling":"சுன் முன் கிராக்கிளிங்"};
 const T=k=>UI_TEXT[currentLanguage][k]||UI_TEXT.en[k]||k;
-const categoryLabel=n=>currentLanguage==="ta"?(CATEGORY_TA[n]||n):n;
+const categoryLabel=n=>currentLanguage==="ta"?((CATALOG.find(c=>c.category===n)?.category_ta)||CATEGORY_TA[n]||n):n;
 function applyLanguage(){
 document.documentElement.lang=currentLanguage==="ta"?"ta":"en";
 document.body.classList.toggle("lang-ta", currentLanguage==="ta");
@@ -727,7 +728,7 @@ function renderCatalog(){
         <tbody>
           ${cat.items.map((it, ii) => {
             const id = ci + '-' + ii;
-            const fr = finalRate(it.rate, it.discount);
+            const fr = Number(it.final_rate)||finalRate(it.rate, it.discount);
             const available = String(it.status || 'AVAILABLE').toUpperCase() !== 'SOLD OUT';
             return `<tr class="${available ? '' : 'sold-out-row'}">
               <td class="pname"><span class="product-name-en">${escapeHtml(it.name)}</span><span class="product-name-ta">${escapeHtml(it.name_ta||it.name)}</span><span class="pcontent">${escapeHtml(it.content)}</span>${available ? '' : '<span class="sold-badge">${T("soldOut")}</span>'}</td>
@@ -871,6 +872,7 @@ function buildMessage(order){
   lines.push('');
   lines.push(ta ? '*பணம் செலுத்துதல்*' : '*PAYMENT*');
   lines.push('GPay : 8838203303 (Parthiban)');
+  lines.push('GPay : 7010242730 (Ponmanaraj.I)');
   lines.push(ta ? 'பணம் செலுத்திய பிறகு payment screenshot-ஐ WhatsApp-ல் பகிரவும்.' : 'After payment, please share the payment screenshot on WhatsApp.');
   lines.push(ta ? 'Screenshot பெறப்பட்டு பணம் சரிபார்க்கப்பட்ட பிறகே பொருட்கள் அனுப்பப்படும்.' : 'Shipment will be made only after screenshot is received and payment is verified.');
   if(order.note) {
@@ -913,7 +915,7 @@ async function loadProducts(){
       if(!grouped.has(r.category)) grouped.set(r.category,{category:r.category,category_ta:r.category_ta||r.category,note:(Number(r.discount)||0)>0 ? (Number(r.discount)+'% OFF') : 'Net Rate',items:[]});
       grouped.get(r.category).items.push({
         name:r.name, name_ta:r.name_ta||r.name, category_ta:r.category_ta||r.category,
-        content:r.content||'', rate:Number(r.rate)||0, discount:Number(r.discount)||0,
+        content:r.content||'', rate:Number(r.rate)||0, final_rate:Number(r.final_rate)||0, discount:Number(r.discount)||0,
         status:(r.status||'AVAILABLE').trim().toUpperCase()
       });
     });
@@ -975,8 +977,8 @@ document.getElementById('share-payment').addEventListener('click', async () => {
   }
 
   const text = currentOrder
-    ? 'Payment screenshot for Order ' + currentOrder.orderNo + ' — GPay 8838203303 (Parthiban). Please verify payment before shipping.'
-    : 'Payment screenshot — GPay 8838203303 (Parthiban). Please verify payment before shipping.';
+    ? 'Payment screenshot for Order ' + currentOrder.orderNo + ' — GPay 8838203303 (Parthiban) / 7010242730 (Ponmanaraj.I). Please verify payment before shipping.'
+    : 'Payment screenshot — GPay 8838203303 (Parthiban) / 7010242730 (Ponmanaraj.I). Please verify payment before shipping.';
 
   try {
     if (navigator.share && (!navigator.canShare || navigator.canShare({files:[file]}))) {
