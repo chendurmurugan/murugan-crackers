@@ -42,7 +42,12 @@
     padding:56px 20px 40px;
     position:relative;
   }
-  .cover-inner{max-width:780px;margin:0 auto;}
+  .cover-inner{max-width:1180px;margin:0 auto;position:relative;}
+  .hero-shop-row{display:flex;align-items:center;justify-content:center;gap:clamp(10px,4vw,55px);}
+  .hero-shop-name{flex:0 1 auto;min-width:0;}
+  .hero-crackers{width:clamp(90px,14vw,170px);height:auto;flex:0 0 auto;filter:drop-shadow(0 5px 8px rgba(0,0,0,.18));}
+  .hero-crackers.right{transform:scaleX(-1);}
+  @media(max-width:620px){.hero-shop-row{gap:6px}.hero-crackers{width:72px}.cover h1{font-size:clamp(1.75rem,8vw,2.5rem)}}
   .stamp{
     display:inline-flex;align-items:center;gap:8px;
     border:1.5px solid var(--gold-soft);
@@ -336,7 +341,11 @@
 <div class="cover">
   <div class="cover-inner">
     <div class="language-switch" role="group" aria-label="Language"><button type="button" class="lang-btn active" data-lang="en">English</button><button type="button" class="lang-btn" data-lang="ta">தமிழ்</button></div><span class="stamp" id="stamp-text">✦ Diwali Price List — Season Discount</span>
-    <h1>Chendurmurugan Crackers</h1>
+    <div class="hero-shop-row">
+      <img class="hero-crackers left" src="assets/crackers-decoration.svg" alt="Crackers decoration">
+      <div class="hero-shop-name"><h1>Chendurmurugan Crackers</h1></div>
+      <img class="hero-crackers right" src="assets/crackers-decoration.svg" alt="Crackers decoration">
+    </div>
     <p class="tagline" id="tagline-text">Direct from Sivakasi. Sound crackers, sparklers, aerial fancy &amp; gift boxes at wholesale rates.</p>
     <div class="shop-contact">
       <a href="tel:8838203303" id="contact-primary">Contact / WhatsApp: 8838203303</a>
