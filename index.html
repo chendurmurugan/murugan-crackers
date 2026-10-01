@@ -260,6 +260,75 @@
   .product-name-ta{display:none;}
   body.lang-ta .product-name-en{display:none;}
   body.lang-ta .product-name-ta{display:inline;}
+  /* ---- Storefront layout inspired by the reference image ---- */
+  .cover{
+    background:
+      radial-gradient(circle at 50% 15%, rgba(255,255,255,.18), transparent 32%),
+      linear-gradient(135deg,#ffb300 0%,#ff7a00 42%,#e51b23 100%);
+    color:#fff;
+    padding:22px 18px 24px;
+    border-bottom:0;
+  }
+  .cover-inner{max-width:1180px;margin:0 auto;text-align:center;}
+  .language-switch{margin-bottom:10px;}
+  .lang-btn{border-color:rgba(255,255,255,.7);color:#fff;background:rgba(0,0,0,.12);}
+  .lang-btn.active{background:#fff;color:var(--maroon);}
+  .stamp{border-color:#fff;color:#fff;background:rgba(0,0,0,.12);margin-bottom:10px;}
+  .cover h1{font-size:clamp(2rem,5vw,3.4rem);text-shadow:0 3px 0 rgba(0,0,0,.16);margin-bottom:8px;}
+  .cover p.tagline{color:#fff;max-width:none;margin:0 auto 12px;}
+  .shop-contact{justify-content:center;margin-top:8px;color:#fff;}
+  .shop-contact a{color:#fff;text-decoration:none;font-weight:700;}
+  .cover-meta{justify-content:center;border-top:1px solid rgba(255,255,255,.35);padding-top:12px;color:#fff;}
+  .cover-meta b{color:#fff;}
+  .store-toolbar{
+    position:sticky;top:0;z-index:30;
+    background:#f20b0b;color:#fff;
+    border-bottom:1px solid #c90000;
+    box-shadow:0 2px 8px rgba(0,0,0,.12);
+  }
+  .store-toolbar-inner{
+    max-width:1180px;margin:0 auto;padding:10px 18px;
+    display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  }
+  .store-select,.store-search{
+    height:42px;border:0;border-radius:3px;font:500 .95rem 'IBM Plex Sans',sans-serif;
+  }
+  .store-select{background:#a90000;color:#fff;padding:0 14px;min-width:150px;}
+  .store-search{width:min(360px,55vw);padding:0 14px;color:#222;}
+  .store-summary{margin-left:auto;display:flex;gap:10px;align-items:center;font-weight:700;white-space:nowrap;}
+  .store-summary span{background:#8f0000;padding:8px 10px;border-radius:3px;}
+  .store-cart{border:0;background:transparent;color:#fff;font-size:1.8rem;cursor:pointer;line-height:1;padding:2px 6px;}
+  .category-nav{max-width:1180px;margin:0 auto;padding:10px 18px;background:#fff;position:static;}
+  .category-nav button{border:1px solid #ddd;border-radius:3px;background:#fff;color:#333;}
+  main{max-width:1180px;margin:0 auto;padding:0 0 130px;}
+  .cat{margin-top:20px;}
+  .cat-head{background:#f20b0b;color:#fff;border:0;padding:10px 12px;margin:0;}
+  .cat-head h2{color:#fff;font-family:'IBM Plex Sans',sans-serif;font-size:1rem;font-weight:700;}
+  .cat-head span{color:#fff;}
+  table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:.9rem;background:#fff;}
+  thead th{background:#eee;color:#111;opacity:1;border:1px solid #bbb;padding:11px 7px;text-align:center;font-weight:700;}
+  tbody td{border:1px solid #ccc;padding:10px 7px;text-align:center;}
+  .cat table th:first-child,.cat table td:first-child{width:42%;text-align:left;}
+  .pname{text-align:left;font-weight:600;min-width:0;}
+  .pcontent{opacity:.72;}
+  .rate-old{color:#333;opacity:1;text-decoration:line-through;}
+  .rate-final{color:#a00000;font-weight:700;}
+  .qty{justify-content:center;}
+  .qty button{background:#f5f5f5;border:1px solid #bbb;}
+  .amount{min-width:70px;}
+  footer{max-width:1180px;padding:0 18px 60px;}
+  .owner-tools{margin-bottom:100px;}
+  .orderbar{background:#ffdf80;border-top:1px solid #e5bd55;}
+  @media(max-width:700px){
+    .store-summary{margin-left:0;width:100%;justify-content:center;}
+    .store-search{width:100%;}
+    .store-select{flex:1;}
+    table{font-size:.78rem;}
+    thead th{padding:8px 4px;}
+    tbody td{padding:8px 4px;}
+    .cat table th:first-child,.cat table td:first-child{width:38%;}
+  }
+
 </style>
 </head>
 <body>
@@ -280,6 +349,19 @@
   </div>
 </div>
 
+<div class="store-toolbar" id="store-toolbar">
+  <div class="store-toolbar-inner">
+    <select class="store-select" id="category-select" aria-label="Category">
+      <option value="">Category</option>
+    </select>
+    <input class="store-search" id="product-search" type="search" placeholder="Search for an item" aria-label="Search for an item">
+    <div class="store-summary">
+      <span>Net Total : <b id="toolbar-net">₹0</b></span>
+      <span>Items : <b id="toolbar-count">0</b></span>
+      <button class="store-cart" id="toolbar-cart" type="button" aria-label="Open cart">🛒</button>
+    </div>
+  </div>
+</div>
 <div class="category-nav" id="category-nav" aria-label="Product categories"></div>
 <main id="catalog"></main>
 
@@ -373,7 +455,7 @@ document.getElementById("customer-name").placeholder=T("namePlaceholder");docume
 document.getElementById("order-total-label").textContent=T("orderTotal");document.getElementById("payment-title").textContent=T("payment");document.getElementById("payment-note").textContent=T("paymentNote");document.getElementById("payment-warning").textContent=T("paymentWarning");
 document.getElementById("share-payment").textContent=T("sharePayment");document.getElementById("payment-help").textContent=T("paymentHelp");document.getElementById("modal-cancel").textContent=T("back");document.getElementById("confirm-order").textContent=T("confirmSend");
 document.querySelector(".owner-tools a").textContent=T("owner");document.querySelectorAll(".lang-btn").forEach(b=>b.classList.toggle("active",b.dataset.lang===currentLanguage));
-renderCategoryNav();renderCatalog();updateTotals();
+renderCategoryNav();renderCatalog();populateStoreFilters();filterCatalog();updateTotals();
 }
 function setLanguage(lang){currentLanguage=lang==="ta"?"ta":"en";localStorage.setItem(LANGUAGE_KEY,currentLanguage);applyLanguage();}
 
@@ -704,6 +786,26 @@ const cart = {}; // id -> qty
 function finalRate(rate, discount){ return Math.round(rate * (1 - discount/100)); }
 
 
+function populateStoreFilters(){
+  const select=document.getElementById('category-select');
+  if(!select) return;
+  select.innerHTML='<option value="">Category</option>'+CATALOG.map(cat=>'<option value="'+escapeHtml(cat.category)+'">'+escapeHtml(categoryLabel(cat.category))+'</option>').join('');
+}
+function filterCatalog(){
+  const q=(document.getElementById('product-search')?.value||'').trim().toLowerCase();
+  const cat=(document.getElementById('category-select')?.value||'').trim();
+  document.querySelectorAll('#catalog .cat').forEach((section,ci)=>{
+    const matchesCat=!cat || CATALOG[ci]?.category===cat;
+    let visible=0;
+    section.querySelectorAll('tbody tr').forEach(row=>{
+      const match=!q || row.textContent.toLowerCase().includes(q);
+      row.style.display=(matchesCat && match)?'':'none';
+      if(matchesCat && match) visible++;
+    });
+    section.style.display=visible?'':'none';
+  });
+}
+
 function renderCategoryNav(){
   const nav = document.getElementById('category-nav');
   nav.innerHTML = CATALOG.map((cat, ci) =>
@@ -949,6 +1051,20 @@ function parseCSV(text){
   const headers=lines.shift().map(h=>h.trim());
   return lines.map(r=>Object.fromEntries(headers.map((h,i)=>[h,(r[i]??'').trim()])));
 }
+
+document.getElementById('product-search')?.addEventListener('input', filterCatalog);
+document.getElementById('category-select')?.addEventListener('change', e => {
+  const value=e.target.value;
+  if(value){
+    const idx=CATALOG.findIndex(c=>c.category===value);
+    if(idx>=0) document.getElementById('cat-'+idx)?.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+  filterCatalog();
+});
+document.getElementById('toolbar-cart')?.addEventListener('click', () => {
+  if(selectedItems().length) openOrderModal();
+  else document.getElementById('order-btn')?.scrollIntoView({behavior:'smooth',block:'end'});
+});
 
 document.addEventListener('click', e => {
   const btn=e.target.closest('button[data-act]');
