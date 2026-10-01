@@ -876,6 +876,8 @@ function updateTotals(){
   document.getElementById('item-count').textContent = count + " " + (count === 1 ? T("item") : T("items"));
   document.getElementById('bar-total').textContent = fmt(total);
   document.getElementById('bar-count').textContent = count + " " + (count === 1 ? T("cartItem") : T("cartItems"));
+  const toolbarNet=document.getElementById('toolbar-net'); if(toolbarNet) toolbarNet.textContent=fmt(total);
+  const toolbarCount=document.getElementById('toolbar-count'); if(toolbarCount) toolbarCount.textContent=String(count);
   const btn = document.getElementById('order-btn');
   btn.disabled = count === 0;
 }
